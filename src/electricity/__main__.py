@@ -1,7 +1,7 @@
-from carbon import computation_logger, compute_footprints, logger
-from carbon.compute_footprints import Co2Cost
-from carbon.digital_carbon_framework import Framework
-from carbon.utils import Distribution
+from electricity import computation_logger, compute_footprints, logger
+from electricity.compute_footprints import ElectricityCost
+from electricity.digital_electricity_framework import Framework
+from electricity.utils import Distribution
 
 if __name__ == "__main__":
     logger.setLevel("INFO")

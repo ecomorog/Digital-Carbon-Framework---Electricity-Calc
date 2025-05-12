@@ -1,5 +1,5 @@
 """
-This is the python implementation of the DigitalCarbonFramework referential to compute the carbon emissions of an advertising campaign.
+This is the python implementation of the DigitalCarbonFramework referential to compute the electricity emissions of an advertising campaign.
 """
 
 import os
@@ -8,8 +8,8 @@ from typing import Literal
 import yaml
 from pydantic.dataclasses import dataclass
 
-from carbon import logger
-from carbon.compute_footprints import ElectricityCost, Distribution
+from electricity import logger
+from electricity.compute_electricity import ElectricityCost, Distribution
 
 
 @dataclass
@@ -48,6 +48,7 @@ class Framework:
         """Average energy efficiency of the fixed network in the use phase (kWh/ko)"""
         network_trafic_in_datacenter_country_share: float
         """Share of network traffic in the country of the data center in programmatic"""
+        # Do not need this
         emission_factor_server: float
         """Emission factor for the electricity consumed by the servers (to be adapted depending on the location of the servers) (kgCO2e/kWh)"""
 
@@ -97,7 +98,7 @@ class Framework:
         annual_manufacturing_cost_kgco2: float
         """Server calculation time during an auction (hour)"""
         nb_vm_servers_per_physic_server: int
-        """Annual carbon impact - manufacturing and end of life of an average physical server (kgCO2e)"""
+        """Annual electricity impact - manufacturing and end of life of an average physical server (kgCO2e)"""
         server_time_calculation_during_auction_s: float
         """Number of virtual servers (VMs) per physical server"""
         server_consumption: float
@@ -231,13 +232,13 @@ class Framework:
 
     @dataclass
     class Server:
-        share: float
+        share: float # what does this mean???
         emission_factor: float
         energy_efficiency_kwh_per_ko: float = 0.0
 
-    def multiply_attributes(self, Co2Cost_: Co2Cost, factor: float) -> Co2Cost:
-        return Co2Cost(
-            use=Co2Cost_.use * factor, manufacturing=Co2Cost_.manufacturing * factor
+    def multiply_attributes(self, ElectricityCost_: ElectricityCost, factor: float) -> ElectricityCost:
+        return ElectricityCost(
+            use=ElectricityCost_.use * factor, manufacturing=ElectricityCost_.manufacturing * factor
         )
 
     allocation_network_use: AllocationNetworkUse
@@ -262,7 +263,7 @@ class Framework:
         if config_file is None:
             logger.debug("Loading default config")
             config_file = os.path.join(
-                os.path.dirname(__file__), "digital_carbon_framework.yml"
+                os.path.dirname(__file__), "digital_electricity_framework.yml"
             )
 
         with open(config_file, "r") as file:
@@ -435,17 +436,17 @@ class Framework:
         return [server1, server2]
 
     @property
-    def kgco2_allocation_server(self) -> Co2Cost:
-        return Co2Cost(
-            use=(
+    def kWh_allocation_server(self) -> ElectricityCost:
+        return ElectricityCost(
+            use=( # this section is fine
                 self.allocation_servers_use.nb_server_requests_per_active_path
                 * self.allocation_servers_use.pue
                 * (1 + self.allocation_servers_use.server_consumption)
                 * self.allocation_servers_use.server_time_calculation_during_auction_s
                 * self.allocation_servers_use.vm_mean_power_in_kW
-                * sum(
+                * sum( #how do I modify 
                     [
-                        servers.share * servers.emission_factor
+                        servers.share
                         for servers in self.alloc_servers
                     ]
                 )
@@ -461,16 +462,15 @@ class Framework:
         )
 
     @property
-    def kgco2_allocation_network(self) -> Co2Cost:
-        return Co2Cost(
-            use=(
+    def kWH_allocation_network(self) -> ElectricityCost:
+        return ElectricityCost(
+            use=(    # this section is fine
                 self.allocation_network_use.nb_requests_per_active_path
                 * self.allocation_network_use.mean_https_request_k0
                 * (1 + self.allocation_network_use.uncertainty_margin)
                 * self.allocation_network_use.fixed_network_use
                 * self.allocation_network_use.energy_efficiency_fixed_network_in_use_kWh_per_kO
                 * self.allocation_network_use.network_trafic_in_datacenter_country_share
-                * self.allocation_network_use.emission_factor_server
             ),
             manufacturing=(
                 self.allocation_network_manufacturing.nb_requests_per_active_path
@@ -482,13 +482,12 @@ class Framework:
         )
 
     @property
-    def kgco2_distrib_server(self) -> Co2Cost:
-        return Co2Cost(
+    def kWh_distrib_server(self) -> ElectricityCost:
+        return ElectricityCost(
             use=self.distribution_server_use.pue_mean
-            * sum(
+            * sum(  # this section is fine
                 [
                     servers.share
-                    * servers.emission_factor
                     * servers.energy_efficiency_kwh_per_ko
                     for servers in self.distrib_servers
                 ]
@@ -499,19 +498,13 @@ class Framework:
         )
 
     @property
-    def kgco2_distrib_network(self) -> Co2Cost:
-        return Co2Cost(
-            use=(
+    def kWh_distrib_network(self) -> ElectricityCost:
+        return ElectricityCost(
+            use=( # this fine
                 self.distribution_network_use.fixed_mobile_usage_share
                 * self.distribution_network_use.energy_efficiency_mobile_in_use_kWh_per_kO
                 + self.distribution_network_use.fixed_network_usage_share
                 * self.distribution_network_use.energy_efficiency_fixed_network_in_use_kWh_per_kO
-            )
-            * (
-                self.distribution_network_use.server_share_local
-                * self.distribution_network_use.emission_factor_target_country
-                + self.distribution_network_use.server_share_datacenter
-                * self.distribution_network_use.emission_factor_worldwide
             ),
             manufacturing=(
                 self.distribution_network_manufacturing.fixed_network_usage_share
@@ -521,25 +514,24 @@ class Framework:
             ),
         )
 
-    def kgco2_distrib_terminal(self, devices_repartition: Distribution) -> Co2Cost:
-        Co2Cost_terminals = Co2Cost()
+    def kWh_distrib_terminal(self, devices_repartition: Distribution) -> ElectricityCost:
+        ElectricityCost_terminals = ElectricityCost()
         for device in [self.tv, self.desktop, self.tablet, self.smart_phone]:
-            kgco2_per_device = self.kgco2_device(device)
-            Co2Cost_terminals.use += (
-                kgco2_per_device.use * devices_repartition.get_ratio(device.name, -1)
+            kWh_per_device = self.kWh_device(device) # this section is fine
+            ElectricityCost_terminals.use += (
+                kWh_per_device.use * devices_repartition.get_ratio(device.name, -1)
             )
-            Co2Cost_terminals.manufacturing += (
-                kgco2_per_device.manufacturing
+            ElectricityCost_terminals.manufacturing += ( # needs some work
+                kWh_per_device.manufacturing
                 * devices_repartition.get_ratio(device.name, -1)
             )
-        return Co2Cost_terminals
+        return ElectricityCost_terminals
 
-    def kgco2_device(self, specified_device) -> Co2Cost:
-        return Co2Cost(
+    def kWh_device(self, specified_device) -> ElectricityCost:
+        return ElectricityCost( # this is fine
             use=(
                 specified_device.average_power_watt
                 * self.from_kilo
-                * self.distribution_terminal_use.emission_factor_target_country
                 * self.seconds_to_hour
             ),
             manufacturing=(
