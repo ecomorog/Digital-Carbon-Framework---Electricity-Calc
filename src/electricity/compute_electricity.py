@@ -8,7 +8,7 @@ import typing
 from pydantic import BaseModel
 
 from electricity import computation_logger
-from electricity.utils import Distributionco2
+from electricity.utils import Distribution
 
 # This function is fine
 class ElectricityCost(BaseModel):

@@ -48,9 +48,6 @@ class Framework:
         """Average energy efficiency of the fixed network in the use phase (kWh/ko)"""
         network_trafic_in_datacenter_country_share: float
         """Share of network traffic in the country of the data center in programmatic"""
-        # Do not need this
-        emission_factor_server: float
-        """Emission factor for the electricity consumed by the servers (to be adapted depending on the location of the servers) (kgCO2e/kWh)"""
 
     @dataclass
     class AllocationNetworkManufacturing:
@@ -63,7 +60,7 @@ class Framework:
         uncertainty_margin: float
         """Uncertainty margin"""
         fixed_network_use: float
-        impact_1ko_transport_on_fixed_network_kgCo2_per_kO: float
+        impact_1ko_transport_on_fixed_network_kWh_per_kO: float
         """Impact of transporting 1 KB of data via fixed network including manufacturing, transport and end of life (excluding use) (kgCO2e/ko)"""
 
     @dataclass
@@ -80,15 +77,6 @@ class Framework:
         """Average PUE of a data center"""
         server_consumption: float
         """Modeling of server consumption linked to uses excluding auctions and distribution (reporting, machine learning, back-end, etc.)"""
-        #may not need these values
-        server_share_local: float
-        """Share of servers in France"""
-        server_share_worldwide: float
-        """Share of international servers"""
-        emission_factor_country: float
-        """Electricity emission factor in target country"""
-        emission_factor_worldwide: float
-        """International electricity emission factor for IT uses"""
 
     @dataclass
     class AllocationServersManufacturing:
@@ -128,14 +116,6 @@ class Framework:
         """Average energy efficiency of a server the target country (kWh/ko)"""
         energy_efficiency_server_worldwide: float
         """Average energy efficiency of a server worldwide (kWh/ko)"""
-        server_share_local: float
-        """Share of servers in the target country"""
-        server_share_worldwide: float
-        """Share of servers worlwide"""
-        emission_factor_worldwide: float
-        """Electricity emission factor worlwide (kgCO2e/kWh)"""
-        emission_factor_target_country: float
-        """Electricity emission factor in the target country (kgCO2e/kWh)"""
 
     @dataclass
     class DistributionServerManufacturing:
@@ -162,10 +142,7 @@ class Framework:
         """Average energy efficiency of the fixed network in the use phase (kWh/ko)"""
         energy_efficiency_mobile_in_use_kWh_per_kO: float
         """Average energy efficiency of the mobile network in the use phase (kWh/ko)"""
-        emission_factor_target_country: float
-        """Emission factor of the electricity consumed by the audience (kgCO2e/kWh)"""
-        emission_factor_worldwide: float
-        """Emission factor of the electricity consumed worldwide  (kgCO2e/kWh)"""
+
 
     @dataclass
     class DistributionNetworkManufacturing:
@@ -175,9 +152,9 @@ class Framework:
         """Average share of fixed network usage (wifi)"""
         fixed_mobile_usage_share: float
         """Average share of mobile usage (4G)"""
-        transport_cost_on_fixed_network_kgCo2_per_kO: float
+        transport_cost_on_fixed_network_kWh_per_kO: float
         """Impact of transporting 1 KB of data via fixed network including manufacturing, transport and end of life (excluding use) (kgCO2e/ko)"""
-        transport_cost_on_mobile_kgCo2_per_kO: float
+        transport_cost_on_mobile_kWh_per_kO: float
         """Impact of transporting 1 KB of data via mobile network including manufacturing, transport and end of life (excluding use) (kgCO2e/ko)"""
 
     @dataclass
@@ -196,8 +173,7 @@ class Framework:
         """Average computer power in active mode"""
         tablet_average_power_watt: float
         """Average tablet power in active mode"""
-        emission_factor_target_country: float
-        """Emission factor of the electricity consumed by the audience"""
+
 
     @dataclass
     class DistributionTerminalManufacturing:

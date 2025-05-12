@@ -21,11 +21,7 @@ allocation_servers_use:
   vm_mean_power_in_kW: 0.0085
   pue: 1.69
   server_consumption: 0.5
-  # don't need
-  #server_share_local: 0.45
-  #server_share_worldwide: 0.55
-  #emission_factor_country: 0.052
-  #emission_factor_worldwide: 0.357
+
 
 allocation_servers_manufacturing:
   nb_server_requests_per_active_path: 2
@@ -48,11 +44,7 @@ distribution_server_use:
   pue_mean: 1.69
   energy_efficiency_server_target_country: 6.69e-8
   energy_efficiency_server_worldwide: 7.1e-9
-  server_share_local: 0.45
-  server_share_worldwide: 0.55
-  # dont need
-  #emission_factor_worldwide: 0.357
-  #emission_factor_target_country: 0.052
+
     
 distribution_server_manufacturing:
   annual_manufacturing_cost_kWh: # need new val732
@@ -68,8 +60,7 @@ distribution_network_use:
   energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8
   energy_efficiency_mobile_in_use_kWh_per_kO: 2.36e-7
   #dont need the following vals
-  #emission_factor_target_country: 0.052
-  #emission_factor_worldwide: 0.220
+
 
 distribution_network_manufacturing:
   fixed_network_usage_share: 0.9
@@ -86,7 +77,6 @@ distribution_terminal_use:
   tv_average_power_watt: 81.6
   desktop_average_power_watt: 29.4
   tablet_average_power_watt: 29.4
-  emission_factor_target_country: 0.052
 
 distribution_terminal_manufacturing:
   desktop_average_lifetime_years: 5
