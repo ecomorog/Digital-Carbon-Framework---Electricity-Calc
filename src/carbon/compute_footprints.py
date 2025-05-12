@@ -32,14 +32,7 @@ class Co2Cost(BaseModel):
 
         :return: Return the total kgco2 cost of a Co2Cost object.
         :rtype: float
-
-        """
-        return self.use + self.manufacturing
-
-
-class _ShowMixin(BaseModel):
-    """Mixin to pretty print costs."""
-
+r
     @property
     def overall(self) -> Co2Cost:
         raise NotImplementedError
