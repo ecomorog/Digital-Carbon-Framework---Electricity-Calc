@@ -24,7 +24,7 @@ class Device:
     """Average lifetime lifespan (in hours)"""
     average_daily_use_hours_per_day: float
     """Duration of daily device use (in hours)"""
-    manufacturing_cost_kgElectricity: float
+    manufacturing_cost_kWh: float
     """Average impact of the device, including manufacturing, transport and end of life on its lifespan (excluding use)"""
 
 
@@ -95,7 +95,7 @@ class Framework:
 
         nb_server_requests_per_active_path: int
         """Number of servers requested per active path"""
-        annual_manufacturing_cost_kgco2: float
+        annual_manufacturing_cost_kWh: float
         """Server calculation time during an auction (hour)"""
         nb_vm_servers_per_physic_server: int
         """Annual electricity impact - manufacturing and end of life of an average physical server (kgCO2e)"""
@@ -140,7 +140,7 @@ class Framework:
     class DistributionServerManufacturing:
         """Parameters related to the fabrication, utilization and life cycle of the server for the distribution part"""
 
-        annual_manufacturing_cost_kgco2: float
+        annual_manufacturing_cost_kWh: float
         """Average impact of a server reduced to one year of use, including manufacturing, transport and end of life (excluding use) (kgCo2)"""
         bandwidth_server_ko_per_s: float
         """Server bandwidth (Ko/s)"""
@@ -206,28 +206,28 @@ class Framework:
         """Average desktop lifespan"""
         desktop_average_daily_use_hours_per_day: float
         """Duration of daily use of a desktop"""
-        desktop_manufacturing_cost_kgco2: float
+        desktop_manufacturing_cost_kWh: float
         """Average impact of a desktop, including manufacturing, transport and end of life on its lifespan (excluding use)"""
 
         tv_average_lifetime_years: float
         """Average connected tv lifespan"""
         tv_average_daily_use_hours_per_day: float
         """Duration of daily use of a connected tv"""
-        tv_manufacturing_cost_kgco2: float
+        tv_manufacturing_cost_kWh: float
         """Average impact of a connected tv, including manufacturing, transport and end of life on its lifespan (excluding use)"""
 
         tablet_average_lifetime_years: float
         """Average tablet lifespan"""
         tablet_average_daily_use_hours_per_day: float
         """Duration of daily use of a tablet"""
-        tablet_manufacturing_cost_kgco2: float
+        tablet_manufacturing_cost_kWh: float
         """Average impact of a tablet, including manufacturing, transport and end of life on its lifespan (excluding use)"""
 
         smart_phone_average_lifetime_years: float
         """Average smart phone lifespan"""
         smart_phone_average_daily_use_hours_per_day: float
         """Duration of daily use of a smart phone"""
-        smart_phone_manufacturing_cost_kgco2: float
+        smart_phone_manufacturing_cost_kWh: float
         """Average impact of a smart phone, including manufacturing, transport and end of life on its lifespan (excluding use)"""
 
     @dataclass
@@ -302,7 +302,7 @@ class Framework:
             average_power_watt=power,
             average_lifetime_years=self.distribution_terminal_manufacturing.smart_phone_average_lifetime_years,
             average_daily_use_hours_per_day=self.distribution_terminal_manufacturing.smart_phone_average_daily_use_hours_per_day,
-            manufacturing_cost_kgco2=self.distribution_terminal_manufacturing.smart_phone_manufacturing_cost_kgco2,
+            manufacturing_cost_kWh=self.distribution_terminal_manufacturing.smart_phone_manufacturing_cost_kWh,
         )
 
     @property
@@ -312,7 +312,7 @@ class Framework:
             average_power_watt=self.distribution_terminal_use.tv_average_power_watt,
             average_lifetime_years=self.distribution_terminal_manufacturing.tv_average_lifetime_years,
             average_daily_use_hours_per_day=self.distribution_terminal_manufacturing.tv_average_daily_use_hours_per_day,
-            manufacturing_cost_kgco2=self.distribution_terminal_manufacturing.tv_manufacturing_cost_kgco2,
+            manufacturing_cost_kWh=self.distribution_terminal_manufacturing.tv_manufacturing_cost_kWh,
         )
 
     @property
@@ -322,7 +322,7 @@ class Framework:
             average_power_watt=self.distribution_terminal_use.desktop_average_power_watt,
             average_lifetime_years=self.distribution_terminal_manufacturing.desktop_average_lifetime_years,
             average_daily_use_hours_per_day=self.distribution_terminal_manufacturing.desktop_average_daily_use_hours_per_day,
-            manufacturing_cost_kgco2=self.distribution_terminal_manufacturing.desktop_manufacturing_cost_kgco2,
+            manufacturing_cost_kWh=self.distribution_terminal_manufacturing.desktop_manufacturing_cost_kWh,
         )
 
     @property
@@ -332,7 +332,7 @@ class Framework:
             average_power_watt=self.distribution_terminal_use.tablet_average_power_watt,
             average_lifetime_years=self.distribution_terminal_manufacturing.tablet_average_lifetime_years,
             average_daily_use_hours_per_day=self.distribution_terminal_manufacturing.tablet_average_daily_use_hours_per_day,
-            manufacturing_cost_kgco2=self.distribution_terminal_manufacturing.tablet_manufacturing_cost_kgco2,
+            manufacturing_cost_kWh=self.distribution_terminal_manufacturing.tablet_manufacturing_cost_kWh,
         )
 
     @property
@@ -453,7 +453,7 @@ class Framework:
             ),
             manufacturing=(
                 self.allocation_servers_manufacturing.nb_server_requests_per_active_path
-                * self.allocation_servers_manufacturing.annual_manufacturing_cost_kgco2
+                * self.allocation_servers_manufacturing.annual_manufacturing_cost_kWh
                 / self.allocation_servers_manufacturing.nb_vm_servers_per_physic_server
                 * (1 + self.allocation_servers_manufacturing.server_consumption)
                 * self.allocation_servers_manufacturing.server_time_calculation_during_auction_s
@@ -492,7 +492,7 @@ class Framework:
                     for servers in self.distrib_servers
                 ]
             ),
-            manufacturing=self.distribution_server_manufacturing.annual_manufacturing_cost_kgco2
+            manufacturing=self.distribution_server_manufacturing.annual_manufacturing_cost_kWh #nned to replace this val
             / self.distribution_server_manufacturing.bandwidth_server_ko_per_s
             / self.second_in_years,
         )
@@ -506,7 +506,7 @@ class Framework:
                 + self.distribution_network_use.fixed_network_usage_share
                 * self.distribution_network_use.energy_efficiency_fixed_network_in_use_kWh_per_kO
             ),
-            manufacturing=(
+            manufacturing=( # needs some working, 
                 self.distribution_network_manufacturing.fixed_network_usage_share
                 * self.distribution_network_manufacturing.transport_cost_on_fixed_network_kgCo2_per_kO
                 + self.distribution_network_manufacturing.fixed_mobile_usage_share
@@ -535,7 +535,7 @@ class Framework:
                 * self.seconds_to_hour
             ),
             manufacturing=(
-                specified_device.manufacturing_cost_kgco2
+                specified_device.manufacturing_cost_kWh # need this value
                 * self.seconds_to_hour
                 / (
                     specified_device.average_daily_use_hours_per_day
