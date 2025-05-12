@@ -80,6 +80,7 @@ class Framework:
         """Average PUE of a data center"""
         server_consumption: float
         """Modeling of server consumption linked to uses excluding auctions and distribution (reporting, machine learning, back-end, etc.)"""
+        #may not need these values
         server_share_local: float
         """Share of servers in France"""
         server_share_worldwide: float
@@ -357,14 +358,15 @@ class Framework:
             self._emission_factors_dict_iso3 = self._emission_factors_dict_iso3
         return self._emission_factors_dict_iso3
 
-    def change_target_country(self, alpha_code: str):
-        """
+    #don't need this function if we are not using the co
+    """def change_target_country(self, alpha_code: str):
+        
         Set the emission factors of the specified country
 
         :param alpha_code:  alpha_code of the specified country. Support iso2 & iso3 countries (ex: country: 'France', alpha_code='FR' or alpha_code='FRA' supported)
         :type alpha_code: str
 
-        """
+        
         logger.info(f"Changing Target country to {alpha_code}")
 
         if len(alpha_code) == 3:
@@ -390,7 +392,7 @@ class Framework:
         except KeyError:
             logger.error(f"Alpha code {alpha_code} not in database")
             logger.info(f"Emission factors not changed: {alpha_code} not referenced")
-            raise
+            raise"""
 
     @property
     def allocation_factor(self) -> float:
@@ -477,7 +479,7 @@ class Framework:
                 * self.allocation_network_manufacturing.mean_https_request_k0
                 * (1 + self.allocation_network_manufacturing.uncertainty_margin)
                 * self.allocation_network_manufacturing.fixed_network_use
-                * self.allocation_network_manufacturing.impact_1ko_transport_on_fixed_network_kgCo2_per_kO
+                * self.allocation_network_manufacturing.impact_1ko_transport_on_fixed_network_kWh_per_kO
             ),
         )
 

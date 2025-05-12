@@ -5,7 +5,6 @@ allocation_network_use:
   fixed_network_use: 1.
   energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8
   network_trafic_in_datacenter_country_share: 1.
-  #emission_factor_server: 0.22
     
 allocation_network_manufacturing:
   nb_requests_per_active_path: 3
@@ -22,10 +21,11 @@ allocation_servers_use:
   vm_mean_power_in_kW: 0.0085
   pue: 1.69
   server_consumption: 0.5
-  server_share_local: 0.45
-  server_share_worldwide: 0.55
-  emission_factor_country: 0.052
-  emission_factor_worldwide: 0.357
+  # don't need
+  #server_share_local: 0.45
+  #server_share_worldwide: 0.55
+  #emission_factor_country: 0.052
+  #emission_factor_worldwide: 0.357
 
 allocation_servers_manufacturing:
   nb_server_requests_per_active_path: 2
