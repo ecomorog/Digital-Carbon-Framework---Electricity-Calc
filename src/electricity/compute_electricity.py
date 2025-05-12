@@ -1,5 +1,5 @@
 """
-Contains functions to compute the Co2 cost of bids only, and of ad calls.
+Contains functions to compute the Electricity cost of bids only, and of ad calls.
 """
 
 import sys
@@ -8,19 +8,19 @@ import typing
 from pydantic import BaseModel
 
 from carbon import computation_logger
-from carbon.utils import Distribution
+from carbon.utils import Distributionco2
 
 
-class Co2Cost(BaseModel):
-    """Represents the Co2 cost of a component of the programmatic chain"""
+class ElectricityCost(BaseModel):
+    """Represents the Electricity cost of a component of the programmatic chain"""
 
     use: float = 0
-    """Co2 cost associated to the utilisation of the component"""
+    """Electricity cost associated to the utilisation of the component"""
     manufacturing: float = 0
-    """Co2 cost associated to the fabrication, use and life cycle of the component"""
+    """Electricity cost associated to the fabrication, use and life cycle of the component"""
 
-    def __add__(self, other: "Co2Cost"):
-        return Co2Cost(
+    def __add__(self, other: "ElectricityCost"):
+        return ElectricityCost(
             use=self.use + other.use,
             manufacturing=self.manufacturing + other.manufacturing,
         )
@@ -28,9 +28,9 @@ class Co2Cost(BaseModel):
     @property
     def total(self):
         """
-        Return the total kgco2 cost of a Co2Cost object.
+        Return the total kwH cost of a ElectricityCost object.
 
-        :return: Return the total kgco2 cost of a Co2Cost object.
+        :return: Return the total kwH cost of a ElectricityCost object.
         :rtype: float
 
         """
@@ -41,7 +41,7 @@ class _ShowMixin(BaseModel):
     """Mixin to pretty print costs."""
 
     @property
-    def overall(self) -> Co2Cost:
+    def overall(self) -> ElectricityCost:
         raise NotImplementedError
 
     def show(self, file=sys.stdout):
@@ -52,7 +52,7 @@ class _ShowMixin(BaseModel):
         lines.append(f"This is a {type(self).__name__} object.")
 
         for k, v in dict(self).items():
-            if isinstance(v, Co2Cost):
+            if isinstance(v, ElectricityCost):
                 use = f"{v.use:.4f}"
                 man = f"{v.manufacturing:.4f}"
                 lines.append(f"{k:>32s}: \tuse: {use:>8s} \t manufacture: {man:>8s}")
@@ -62,63 +62,63 @@ class _ShowMixin(BaseModel):
         return "\n".join(str(s) for s in lines)
 
 
-class Co2CampaignCost(_ShowMixin, BaseModel):
-    """Class summerizing the Co2 cost of the different elements of the programmatic chain, as the total cost of the campaign."""
+class ElectricityCampaignCost(_ShowMixin, BaseModel):
+    """Class summarizing the Electricity cost of the different elements of the programmatic chain, as the total cost of the campaign."""
 
-    kgco2_distrib_server: Co2Cost
-    """Co2 cost associated to server usage, for the distribution."""
-    kgco2_distrib_network: Co2Cost
-    """Co2 cost associated to network usage, for the distribution."""
-    kgco2_distrib_terminal: Co2Cost
-    """Co2 cost associated to terminal usage, for the distribution."""
-    kgco2_allocation_network: Co2Cost
-    """Co2 cost associated to network usage, for the allocation."""
-    kgco2_allocation_server: Co2Cost
-    """Co2 cost associated to server usage, for the allocation."""
+    kwH_distrib_server: ElectricityCost
+    """Electricity cost associated to server usage, for the distribution."""
+    kwH_distrib_network: ElectricityCost
+    """Electricity cost associated to network usage, for the distribution."""
+    kwH_distrib_terminal: ElectricityCost
+    """Electricity cost associated to terminal usage, for the distribution."""
+    kwH_allocation_network: ElectricityCost
+    """Electricity cost associated to network usage, for the allocation."""
+    kwH_allocation_server: ElectricityCost
+    """Electricity cost associated to server usage, for the allocation."""
 
     @property
-    def overall(self) -> Co2Cost:
+    def overall(self) -> ElectricityCost:
         """
-        Co2Cost: return a Co2Cost object combining the CO2 emissions of the 5 attributes.
+        ElectricityCost: return a ElectricityCost object combining the Electricity emissions of the 5 attributes.
         """
         return (
-            self.kgco2_distrib_server
-            + self.kgco2_distrib_network
-            + self.kgco2_distrib_terminal
-            + self.kgco2_allocation_network
-            + self.kgco2_allocation_server
+            self.kwH_distrib_server
+            + self.kwH_distrib_network
+            + self.kwH_distrib_terminal
+            + self.kwH_allocation_network
+            + self.kwH_allocation_server
         )
 
 
 class BidCost(_ShowMixin, BaseModel):
-    """Represents the Co2 costs of bids."""
+    """Represents the Electricity costs of bids."""
 
-    kgco2_allocation_network: Co2Cost
-    """Co2 cost associated to network usage"""
-    kgco2_allocation_server: Co2Cost
-    """Co2 cost associated to server usage"""
+    kwH_allocation_network: ElectricityCost
+    """Electricity cost associated to network usage"""
+    kwH_allocation_server: ElectricityCost
+    """Electricity cost associated to server usage"""
 
     @property
-    def overall(self) -> Co2Cost:
-        return self.kgco2_allocation_network + self.kgco2_allocation_server
+    def overall(self) -> ElectricityCost:
+        return self.kwH_allocation_network + self.kwH_allocation_server
 
 
 class AdcallCost(_ShowMixin, BaseModel):
-    """Represents the Co2 costs of ad calls."""
+    """Represents the Electricity costs of ad calls."""
 
-    kgco2_allocation_network: Co2Cost
-    """Co2 cost associated to network usage"""
-    kgco2_allocation_server: Co2Cost
-    """Co2 cost associated to server usage"""
+    kwH_allocation_network: ElectricityCost
+    """Electricity cost associated to network usage"""
+    kwH_allocation_server: ElectricityCost
+    """Electricity cost associated to server usage"""
 
     @property
-    def overall(self) -> Co2Cost:
-        return self.kgco2_allocation_network + self.kgco2_allocation_server
+    def overall(self) -> ElectricityCost:
+        return self.kwH_allocation_network + self.kwH_allocation_server
 
 
 def bids_cost(framework, nb_bids: int) -> BidCost:
     """
-    Return the kgco2 cost of a number of bids.
+    Return the kwH cost of a number of bids.
     A single bid can be approximated as direct buying process. However, due to internal process and calls when bidding, we estimate the number of paths activated to be 4.
 
     Args:
@@ -126,21 +126,21 @@ def bids_cost(framework, nb_bids: int) -> BidCost:
         nb_bids (int): number of bids.
 
     Return:
-        BidCost: a BidCost object containing the Co2 cost of a number of bids.
+        BidCost: a BidCost object containing the Electricity cost of a number of bids.
 
     """
     computation_logger.info(f"Starting bids_cost for {nb_bids} bids.")
 
     allocation_factor = 4
     bid_cost = BidCost(
-        kgco2_allocation_network=Co2Cost(
+        kwH_allocation_network=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_allocation_network, allocation_factor * nb_bids
+                framework.kwH_allocation_network, allocation_factor * nb_bids
             ).dict()
         ),
-        kgco2_allocation_server=Co2Cost(
+        kwH_allocation_server=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_allocation_server, allocation_factor * nb_bids
+                framework.kwH_allocation_server, allocation_factor * nb_bids
             ).dict()
         ),
     )
@@ -153,7 +153,7 @@ def adcalls_cost(
     framework, nb_ad_calls: int, creative_type: typing.Literal["video", "display"]
 ) -> AdcallCost:
     """
-    Return the kgco2 cost of a number of ad calls.
+    Return the kwH cost of a number of ad calls.
     We approximate the number of SSPs connected to be 10 on average for each prebid auction.
     The Framework defines a number of paths activated at each bid: 1 for direct auction, 100 for video ad, 350 for display ad.
     Thus, each adcall activates 10 paths for a video ad, 35 for a display ad.
@@ -164,7 +164,7 @@ def adcalls_cost(
         creative_type (typing.Literal[&quot;video&quot;, &quot;display&quot;]): Type of the creative
 
     Returns:
-        AdcallCost: a AdcallCost object containing the Co2 cost of a number of ad calls.
+        AdcallCost: a AdcallCost object containing the Electricity cost of a number of ad calls.
 
     """
     computation_logger.info(
@@ -180,14 +180,14 @@ def adcalls_cost(
     computation_logger.debug(f"Allocation factor is set to {allocation_factor}.")
 
     adcall_cost = AdcallCost(
-        kgco2_allocation_network=Co2Cost(
+        kwH_allocation_network=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_allocation_network, allocation_factor * nb_ad_calls
+                framework.kwH_allocation_network, allocation_factor * nb_ad_calls
             ).dict()
         ),
-        kgco2_allocation_server=Co2Cost(
+        kwH_allocation_server=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_allocation_server, allocation_factor * nb_ad_calls
+                framework.kwH_allocation_server, allocation_factor * nb_ad_calls
             ).dict()
         ),
     )
@@ -203,8 +203,8 @@ def impressions_cost(
     creative_size_ko: float,
     devices_repartition: Distribution,
     creative_avg_view_s: float = 3,
-) -> Co2CampaignCost:
-    """Return the kgco2 cost of an advertising campaign.
+) -> ElectricityCampaignCost:
+    """Return the kwH cost of an advertising campaign.
 
     Args:
         nb_impressions (int): Total number of impressions
@@ -215,7 +215,7 @@ def impressions_cost(
         creative_avg_view_s (float, optional): average duration view of the creative, in seconds. Mandatory for a display creative. Defaults to 3.
 
     Returns:
-        Co2CampaignCost: Carbon cost of the campaign
+        ElectricityCampaignCost: Carbon cost of the campaign
     """
 
     computation_logger.info(
@@ -251,33 +251,33 @@ def impressions_cost(
         )
     computation_logger.debug(f"allocation_factor setted to {allocation_factor}")
 
-    co2_campaign_cost = Co2CampaignCost(
-        kgco2_distrib_server=Co2Cost(
+    Electricity_campaign_cost = ElectricityCampaignCost(
+        kwH_distrib_server=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_distrib_server, creative_size_ko * nb_impressions
+                framework.kwH_distrib_server, creative_size_ko * nb_impressions
             ).dict()
         ),
-        kgco2_distrib_network=Co2Cost(
+        kwH_distrib_network=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_distrib_network, creative_size_ko * nb_impressions
+                framework.kwH_distrib_network, creative_size_ko * nb_impressions
             ).dict()
         ),
-        kgco2_distrib_terminal=Co2Cost(
+        kwH_distrib_terminal=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_distrib_terminal(devices_repartition),
+                framework.kwH_distrib_terminal(devices_repartition),
                 creative_avg_view_s * nb_impressions,
             ).dict()
         ),
-        kgco2_allocation_network=Co2Cost(
+        kwH_allocation_network=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_allocation_network, allocation_factor * nb_impressions
+                framework.kwH_allocation_network, allocation_factor * nb_impressions
             ).dict()
         ),
-        kgco2_allocation_server=Co2Cost(
+        kwH_allocation_server=ElectricityCost(
             **framework.multiply_attributes(
-                framework.kgco2_allocation_server, allocation_factor * nb_impressions
+                framework.kwH_allocation_server, allocation_factor * nb_impressions
             ).dict()
         ),
     )
-    computation_logger.info(co2_campaign_cost)
-    return co2_campaign_cost
+    computation_logger.info(Electricity_campaign_cost)
+    return Electricity_campaign_cost
