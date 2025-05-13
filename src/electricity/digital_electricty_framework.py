@@ -61,7 +61,7 @@ class Framework:
         """Uncertainty margin"""
         fixed_network_use: float
         impact_1ko_transport_on_fixed_network_kWh_per_kO: float
-        """Impact of transporting 1 KB of data via fixed network including manufacturing, transport and end of life (excluding use) (kgCO2e/ko)"""
+        """Impact of transporting 1 KB of data via fixed network including manufacturing, transport and end of life (excluding use) (kWh/ko)"""
 
     @dataclass
     class AllocationServersUse:
@@ -77,6 +77,10 @@ class Framework:
         """Average PUE of a data center"""
         server_consumption: float
         """Modeling of server consumption linked to uses excluding auctions and distribution (reporting, machine learning, back-end, etc.)"""
+        server_share_local: float
+        """Share of servers in France"""
+        server_share_worldwide: float
+        """Share of international servers"""
 
     @dataclass
     class AllocationServersManufacturing:
@@ -116,13 +120,17 @@ class Framework:
         """Average energy efficiency of a server the target country (kWh/ko)"""
         energy_efficiency_server_worldwide: float
         """Average energy efficiency of a server worldwide (kWh/ko)"""
+        server_share_local: float
+        """Share of servers in France"""
+        server_share_worldwide: float
+        """Share of international servers"""
 
     @dataclass
     class DistributionServerManufacturing:
         """Parameters related to the fabrication, utilization and life cycle of the server for the distribution part"""
 
         annual_manufacturing_cost_kWh: float
-        """Average impact of a server reduced to one year of use, including manufacturing, transport and end of life (excluding use) (kgCo2)"""
+        """Average impact of a server reduced to one year of use, including manufacturing, transport and end of life (excluding use) (kWh)"""
         bandwidth_server_ko_per_s: float
         """Server bandwidth (Ko/s)"""
 
@@ -153,9 +161,9 @@ class Framework:
         fixed_mobile_usage_share: float
         """Average share of mobile usage (4G)"""
         transport_cost_on_fixed_network_kWh_per_kO: float
-        """Impact of transporting 1 KB of data via fixed network including manufacturing, transport and end of life (excluding use) (kgCO2e/ko)"""
+        """Impact of transporting 1 KB of data via fixed network including manufacturing, transport and end of life (excluding use) (kWh/ko)"""
         transport_cost_on_mobile_kWh_per_kO: float
-        """Impact of transporting 1 KB of data via mobile network including manufacturing, transport and end of life (excluding use) (kgCO2e/ko)"""
+        """Impact of transporting 1 KB of data via mobile network including manufacturing, transport and end of life (excluding use) (kWh/ko)"""
 
     @dataclass
     class DistributionTerminalUse:
@@ -209,8 +217,8 @@ class Framework:
 
     @dataclass
     class Server:
-        share: float # what does this mean???
-        emission_factor: float
+        share: float 
+        #emission_factor: float
         energy_efficiency_kwh_per_ko: float = 0.0
 
     def multiply_attributes(self, ElectricityCost_: ElectricityCost, factor: float) -> ElectricityCost:
@@ -240,7 +248,7 @@ class Framework:
         if config_file is None:
             logger.debug("Loading default config")
             config_file = os.path.join(
-                os.path.dirname(__file__), "digital_electricity_framework.yml"
+                os.path.dirname(__file__), "digital_electricty_framework.yml"
             )
 
         with open(config_file, "r") as file:
@@ -334,7 +342,7 @@ class Framework:
             self._emission_factors_dict_iso3 = self._emission_factors_dict_iso3
         return self._emission_factors_dict_iso3
 
-    #don't need this function if we are not using the co
+    #don't need this function if we are not using the co2
     """def change_target_country(self, alpha_code: str):
         
         Set the emission factors of the specified country
@@ -385,12 +393,12 @@ class Framework:
         """
         server2 = self.Server(
             share=self.allocation_servers_use.server_share_worldwide,
-            emission_factor=self.allocation_servers_use.emission_factor_worldwide,
+            #emission_factor=self.allocation_servers_use.emission_factor_worldwide,
         )
 
         server1 = self.Server(
             share=self.allocation_servers_use.server_share_local,
-            emission_factor=self.allocation_servers_use.emission_factor_country,
+            #emission_factor=self.allocation_servers_use.emission_factor_country,
         )
         return [server1, server2]
 
@@ -402,13 +410,13 @@ class Framework:
         """
         server2 = self.Server(
             share=self.distribution_server_use.server_share_worldwide,
-            emission_factor=self.distribution_server_use.emission_factor_worldwide,
+            #emission_factor=self.distribution_server_use.emission_factor_worldwide,
             energy_efficiency_kwh_per_ko=self.distribution_server_use.energy_efficiency_server_worldwide,
         )
 
         server1 = self.Server(
             share=self.distribution_server_use.server_share_local,
-            emission_factor=self.distribution_server_use.emission_factor_target_country,
+            #emission_factor=self.distribution_server_use.emission_factor_target_country,
             energy_efficiency_kwh_per_ko=self.distribution_server_use.energy_efficiency_server_target_country,
         )
         return [server1, server2]
@@ -422,12 +430,6 @@ class Framework:
                 * (1 + self.allocation_servers_use.server_consumption)
                 * self.allocation_servers_use.server_time_calculation_during_auction_s
                 * self.allocation_servers_use.vm_mean_power_in_kW
-                * sum( #how do I modify 
-                    [
-                        servers.share
-                        for servers in self.alloc_servers
-                    ]
-                )
             ),
             manufacturing=(
                 self.allocation_servers_manufacturing.nb_server_requests_per_active_path
@@ -440,7 +442,7 @@ class Framework:
         )
 
     @property
-    def kWH_allocation_network(self) -> ElectricityCost:
+    def kWh_allocation_network(self) -> ElectricityCost:
         return ElectricityCost(
             use=(    # this section is fine
                 self.allocation_network_use.nb_requests_per_active_path
@@ -486,9 +488,9 @@ class Framework:
             ),
             manufacturing=( # needs some working, 
                 self.distribution_network_manufacturing.fixed_network_usage_share
-                * self.distribution_network_manufacturing.transport_cost_on_fixed_network_kgCo2_per_kO
+                * self.distribution_network_manufacturing.transport_cost_on_fixed_network_kWh_per_kO
                 + self.distribution_network_manufacturing.fixed_mobile_usage_share
-                * self.distribution_network_manufacturing.transport_cost_on_mobile_kgCo2_per_kO
+                * self.distribution_network_manufacturing.transport_cost_on_mobile_kWh_per_kO
             ),
         )
 

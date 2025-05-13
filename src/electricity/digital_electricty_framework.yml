@@ -11,8 +11,7 @@ allocation_network_manufacturing:
   mean_https_request_k0: 29
   uncertainty_margin: 0.5
   fixed_network_use: 1.
-  #need new val
-  impact_1ko_transport_on_fixed_network_kWh_per_kO: #4.43e-9
+  impact_1ko_transport_on_fixed_network_kWh_per_kO: 1. # dummy val 4.43e-9
   
 
 allocation_servers_use:
@@ -21,11 +20,13 @@ allocation_servers_use:
   vm_mean_power_in_kW: 0.0085
   pue: 1.69
   server_consumption: 0.5
+  server_share_local: 0.45
+  server_share_worldwide: 0.55
 
 
 allocation_servers_manufacturing:
   nb_server_requests_per_active_path: 2
-  annual_manufacturing_cost_kWh: # need new val732
+  annual_manufacturing_cost_kWh: 1 # dummy val
   nb_vm_servers_per_physic_server: 8
   server_time_calculation_during_auction_s: 5.56e-6
   server_consumption: 0.5
@@ -44,10 +45,12 @@ distribution_server_use:
   pue_mean: 1.69
   energy_efficiency_server_target_country: 6.69e-8
   energy_efficiency_server_worldwide: 7.1e-9
+  server_share_local: 0.45
+  server_share_worldwide: 0.55
 
     
 distribution_server_manufacturing:
-  annual_manufacturing_cost_kWh: # need new val732
+  annual_manufacturing_cost_kWh: 1. # dummy val
   bandwidth_server_ko_per_s: 125000
   
 
@@ -65,8 +68,8 @@ distribution_network_use:
 distribution_network_manufacturing:
   fixed_network_usage_share: 0.9
   fixed_mobile_usage_share: 0.1
-  transport_cost_on_fixed_network_kWh_per_kO: # needs new val
-  transport_cost_on_mobile_kWh_per_kO: # needs new val
+  transport_cost_on_fixed_network_kWh_per_kO: 1. # dummy val
+  transport_cost_on_mobile_kWh_per_kO: 1. # dummy val
 
 
 
@@ -81,15 +84,15 @@ distribution_terminal_use:
 distribution_terminal_manufacturing:
   desktop_average_lifetime_years: 5
   desktop_average_daily_use_hours_per_day: 2.02
-  desktop_manufacturing_cost_kWh: # needs new val
+  desktop_manufacturing_cost_kWh: 1 # dummy val
   tv_average_lifetime_years: 8
   tv_average_daily_use_hours_per_day: 3.85
-  tv_manufacturing_cost_kWh: # needs new val
+  tv_manufacturing_cost_kWh: 1 # dummy val
 
   tablet_average_lifetime_years: 3
   tablet_average_daily_use_hours_per_day: 1.50
-  tablet_manufacturing_cost_kWh: # needs new val
+  tablet_manufacturing_cost_kWh: 1 # dummy val
 
   smart_phone_average_lifetime_years: 2.5
   smart_phone_average_daily_use_hours_per_day: 2.7
-  smart_phone_manufacturing_cost_kWh: # needs new val
+  smart_phone_manufacturing_cost_kWh: 1 # dummy val

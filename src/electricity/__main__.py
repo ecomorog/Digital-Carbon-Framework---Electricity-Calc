@@ -1,6 +1,6 @@
-from electricity import computation_logger, compute_footprints, logger
-from electricity.compute_footprints import ElectricityCost
-from electricity.digital_electricity_framework import Framework
+from electricity import computation_logger, compute_electricity, logger
+from electricity.compute_electricity import ElectricityCost
+from electricity.digital_electricty_framework import Framework
 from electricity.utils import Distribution
 
 if __name__ == "__main__":
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     DEVICES = Distribution(weights=DEVICES_REPARTITION)
     campaign = Framework.load()
 
-    results = compute_footprints.impressions_cost(
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="video",
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     print(results.shows())
 
-    results = compute_footprints.impressions_cost(
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="display",
@@ -40,8 +40,8 @@ if __name__ == "__main__":
     )
     print(results.shows())
 
-    campaign.change_target_country("DE")  # Changed from France to Germany
-    results = compute_footprints.impressions_cost(
+   # campaign.change_target_country("DE")  # Changed from France to Germany
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="display",
@@ -52,12 +52,12 @@ if __name__ == "__main__":
     )
     print(results.shows())
 
-    test = Co2Cost(use=0.1, manufacturing=0.2)
+    test = ElectricityCost(use=0.1, manufacturing=0.2)
 
-    a = compute_footprints.bids_cost(campaign, nb_bids=1000)
+    a = compute_electricity.bids_cost(campaign, nb_bids=1000)
     print(a.shows())
 
-    a = compute_footprints.adcalls_cost(
+    a = compute_electricity.adcalls_cost(
         campaign, nb_ad_calls=1000, creative_type="video"
     )
 
