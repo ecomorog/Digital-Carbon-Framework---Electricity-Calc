@@ -37,7 +37,7 @@ def get_impressions_cost_aggregator(
 
 
 def impressions_cost(df: "pd.DataFrame", campaign_param: Framework) -> "pd.Series":
-    """Compute the kwH usage for a number of impressions."""
+    """Compute the kWh usage for a number of impressions."""
     logger.info("Starting impressions cost")
     return df.aggregate(
         get_impressions_cost_aggregator(campaign_param),
@@ -48,7 +48,7 @@ def impressions_cost(df: "pd.DataFrame", campaign_param: Framework) -> "pd.Serie
 def get_bids_cost_aggregator(
     campaign_param: Framework,
 ) -> typing.Callable[[typing.Mapping[str, typing.Any]], float]:
-    from carbon.compute_footprints import bids_cost
+    from electricity.compute_electricity import bids_cost
 
     def bids_cost_aggregator(row: typing.Mapping[str, typing.Any]) -> float:
         return bids_cost(
