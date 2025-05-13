@@ -11,7 +11,7 @@ allocation_network_manufacturing:
   mean_https_request_k0: 29
   uncertainty_margin: 0.5
   fixed_network_use: 1.
-  impact_1ko_transport_on_fixed_network_kWh_per_kO: 1. # dummy val 4.43e-9
+  impact_1ko_transport_on_fixed_network_kWh_per_kO: 4.43e-9 # dummy val 4.43e-9
   
 
 allocation_servers_use:
@@ -68,8 +68,8 @@ distribution_network_use:
 distribution_network_manufacturing:
   fixed_network_usage_share: 0.9
   fixed_mobile_usage_share: 0.1
-  transport_cost_on_fixed_network_kWh_per_kO: 1. # dummy val
-  transport_cost_on_mobile_kWh_per_kO: 1. # dummy val
+  transport_cost_on_fixed_network_kWh_per_kO: 4.43e-9 # dummy val
+  transport_cost_on_mobile_kWh_per_kO: 7.97e-9 # dummy val
 
 
 
