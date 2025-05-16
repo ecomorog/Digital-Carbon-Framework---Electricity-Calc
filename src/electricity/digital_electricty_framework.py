@@ -429,7 +429,7 @@ class Framework:
                 * self.allocation_servers_use.pue
                 * (1 + self.allocation_servers_use.server_consumption)
                 * self.allocation_servers_use.server_time_calculation_during_auction_s
-                * self.allocation_servers_use.vm_mean_power_in_kW
+                * self.allocation_servers_use.vm_mean_power_in_kWh
             ),
             manufacturing=(
                 self.allocation_servers_manufacturing.nb_server_requests_per_active_path
@@ -472,7 +472,7 @@ class Framework:
                     for servers in self.distrib_servers
                 ]
             ),
-            manufacturing=self.distribution_server_manufacturing.annual_manufacturing_cost_kWh #nned to replace this val
+            manufacturing=self.distribution_server_manufacturing.annual_manufacturing_cost_kWh 
             / self.distribution_server_manufacturing.bandwidth_server_ko_per_s
             / self.second_in_years,
         )

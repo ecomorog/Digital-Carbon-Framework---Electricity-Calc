@@ -1,0 +1,120 @@
+#Bidding system and analytics for optimized digital space sales
+
+# Allocation section: used to calculate electricity consumption of the allocation
+# through various data exchanges, algorithm and a bidding sysytem
+allocation_network_use:
+  nb_requests_per_active_path: 
+  mean_https_request_k0: 
+  uncertainty_margin: 
+  fixed_network_use: 
+  energy_efficiency_fixed_network_in_use_kWh_per_kO: 
+  network_trafic_in_datacenter_country_share:
+# calculations : nb_requests_per_active_path * mean_https_request_k0 * (1 + uncertainty_margin) * fixed_network_use
+#            * energy_efficiency_fixed_network_in_use_kWh_per_kO  * network_trafic_in_datacenter_country_share
+            
+    
+allocation_network_manufacturing:
+  nb_requests_per_active_path: 
+  mean_https_request_k0: 
+  uncertainty_margin: 
+  fixed_network_use: 
+  impact_1ko_transport_on_fixed_network_kWh_per_kO: 
+# calculation : nb_requests_per_active_path * mean_https_request_k0 * (1 + uncertainty_margin)
+#                * fixed_network_use * impact_1ko_transport_on_fixed_network_kWh_per_kO
+
+allocation_servers_use:
+  nb_server_requests_per_active_path:  
+  server_time_calculation_during_auction_s: 
+  vm_mean_power_in_kW: 
+  pue: 
+  server_consumption: 
+  server_share_local: 
+  server_share_worldwide: 
+# calculation : nb_server_requests_per_active_path * pue * (1 + server_consumption) 
+#                * server_time_calculation_during_auction_s * vm_mean_power_in_kWh
+
+
+allocation_servers_manufacturing:
+  nb_server_requests_per_active_path: 
+  annual_manufacturing_cost_kWh: 
+  nb_vm_servers_per_physic_server: 
+  server_time_calculation_during_auction_s: 
+  server_consumption: 
+# calculation: nb_server_requests_per_active_path * annual_manufacturing_cost_kWh / nb_vm_servers_per_physic_server  
+#              * (1 + server_consumption) * server_time_calculation_during_auction_s / hours_in_years
+
+
+
+allocation_network_servers:
+  nb_paths_display: 
+  nb_paths_video: 
+  publisher_activated_paths_share: 
+  ssp_activated_paths_share: 
+
+#calculation:       
+
+
+# Distribution Parameters : the actual distribution of the advertising once the allocation has been made,
+# including the use of the terminal (computer, tablet, smartphone, etc.) by the user to view
+# the ad
+distribution_server_use:
+  pue_mean: 
+  energy_efficiency_server_target_country: 
+  energy_efficiency_server_worldwide: 
+  server_share_local: 
+  server_share_worldwide: 
+# calculation : pue_mean * sum(  
+#                [share * energy_efficiency_kwh_per_ko
+#                    for servers in self.distrib_servers]
+    
+distribution_server_manufacturing:
+  annual_manufacturing_cost_kWh:  
+  bandwidth_server_ko_per_s: 
+# calculation : annual_manufacturing_cost_kWh / bandwidth_server_ko_per_s / second_in_years,
+
+
+distribution_network_use:
+  fixed_network_usage_share: 
+  fixed_mobile_usage_share: 
+  server_share_local: 
+  server_share_datacenter: 
+  energy_efficiency_fixed_network_in_use_kWh_per_kO: 
+  energy_efficiency_mobile_in_use_kWh_per_kO: 
+# calculation : fixed_mobile_usage_share * energy_efficiency_mobile_in_use_kWh_per_kO
+#               + fixed_network_usage_share * energy_efficiency_fixed_network_in_use_kWh_per_kO
+
+distribution_network_manufacturing:
+  fixed_network_usage_share: 
+  fixed_mobile_usage_share: 
+  transport_cost_on_fixed_network_kWh_per_kO:  
+  transport_cost_on_mobile_kWh_per_kO: 
+# calculation : fixed_mobile_usage_share * energy_efficiency_mobile_in_use_kWh_per_kO
+#               + fixed_network_usage_share * energy_efficiency_fixed_network_in_use_kWh_per_kO
+
+distribution_terminal_use:
+  smartphone_usage: browser
+  smart_phone_average_power_watt_app: 2.097122
+  smart_phone_average_power_watt_browser: 2.8525
+  tv_average_power_watt: 81.6
+  desktop_average_power_watt: 29.4
+  tablet_average_power_watt: 29.4
+# computation : average_power_watt *from_kilo * seconds_to_hour
+  
+distribution_terminal_manufacturing:
+  desktop_average_lifetime_years: 5
+  desktop_average_daily_use_hours_per_day: 2.02
+  desktop_manufacturing_cost_kWh:
+
+  tv_average_lifetime_years: 8
+  tv_average_daily_use_hours_per_day: 3.85
+  tv_manufacturing_cost_kWh: 
+
+  tablet_average_lifetime_years: 3
+  tablet_average_daily_use_hours_per_day: 1.50
+  tablet_manufacturing_cost_kWh:
+
+  smart_phone_average_lifetime_years: 2.5
+  smart_phone_average_daily_use_hours_per_day: 2.7
+  smart_phone_manufacturing_cost_kWh:
+
+# calculation : N/A, just use the input value
