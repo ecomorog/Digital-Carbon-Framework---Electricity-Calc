@@ -3,12 +3,26 @@
 # Allocation section: used to calculate electricity consumption of the allocation
 # through various data exchanges, algorithm and a bidding sysytem
 allocation_network_use:
+
+  # number of requests per active path
   nb_requests_per_active_path: 
+
+  # Average weight of an HTTP request in kilo bytes
+  # The average transfer size of all HTML documents requested by a webpage
   mean_https_request_k0: 
+
+  # Uncertainty Margin
   uncertainty_margin: 
+
+  # Average share of fixed network usage in programmatic 
   fixed_network_use: 
+
+  # Average energy efficiency of the fixed network in the use phase (kWh/ko)
   energy_efficiency_fixed_network_in_use_kWh_per_kO: 
-  network_trafic_in_datacenter_country_share:
+
+  # Share of network traffic in the country of the data center in programmatic
+  network_trafic_in_datacenter_country_share: 
+
 # calculations : nb_requests_per_active_path * mean_https_request_k0 * (1 + uncertainty_margin) * fixed_network_use
 #            * energy_efficiency_fixed_network_in_use_kWh_per_kO  * network_trafic_in_datacenter_country_share
             

@@ -1,6 +1,6 @@
 from electricity import computation_logger, compute_electricity, logger
 from electricity.compute_electricity import ElectricityCost
-from electricity.digital_electricty_framework import Framework
+from electricity.digital_electricity_framework import Framework
 from electricity.utils import Distribution
 
 if __name__ == "__main__":

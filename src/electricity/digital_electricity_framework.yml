@@ -50,7 +50,7 @@ distribution_server_use:
 
     
 distribution_server_manufacturing:
-  annual_manufacturing_cost_kWh: 1. # dummy val
+  annual_manufacturing_cost_kWh: 732 # dummy val
   bandwidth_server_ko_per_s: 125000
   
 

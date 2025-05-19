@@ -4,6 +4,8 @@ from electricity.digital_electricity_framework import Framework
 from electricity.utils import Distribution
 
 if __name__ == "__main__":
+
+    # Initialization of logging info
     logger.setLevel("INFO")
     computation_logger.setLevel("INFO")
 

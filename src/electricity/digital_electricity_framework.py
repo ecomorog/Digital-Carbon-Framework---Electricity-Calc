@@ -71,7 +71,7 @@ class Framework:
         """Number of servers requested per active path"""
         server_time_calculation_during_auction_s: float
         """Server calculation time during an auction (hour)"""
-        vm_mean_power_in_kW: float
+        vm_mean_power_in_kWh: float
         """Average power of a virtual server (Watt)"""
         pue: float
         """Average PUE of a data center"""
@@ -248,7 +248,7 @@ class Framework:
         if config_file is None:
             logger.debug("Loading default config")
             config_file = os.path.join(
-                os.path.dirname(__file__), "digital_electricty_framework.yml"
+                os.path.dirname(__file__), "digital_electricity_framework.yml"
             )
 
         with open(config_file, "r") as file:
