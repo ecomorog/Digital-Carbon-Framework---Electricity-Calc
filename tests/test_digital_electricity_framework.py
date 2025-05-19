@@ -46,7 +46,7 @@ class DigitalCarbonTest(unittest.TestCase):
 
     def test_change_target_country(self):
         campaign = digital_electricity_framework.Framework.load()
-        campaign.change_target_country(alpha_code="DEU")
+        campaign.change_target_country(alpha_code="FR")
         self.assertAlmostEqual(
             impressions_cost(
                 campaign,

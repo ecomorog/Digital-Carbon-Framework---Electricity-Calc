@@ -1,0 +1,64 @@
+from electricity import computation_logger, compute_electricity, logger
+from electricity.compute_electricity import ElectricityCost
+from electricity.digital_electricity_framework import Framework
+from electricity.utils import Distribution
+
+if __name__ == "__main__":
+    logger.setLevel("INFO")
+    computation_logger.setLevel("INFO")
+
+    DEVICES_REPARTITION = {
+        "desktop": 60.0,
+        "smart_phone": 20.0,
+        "tablet": 0.0,
+        "connected_tv": 20.0,
+    }
+
+    DEVICES = Distribution(weights=DEVICES_REPARTITION)
+    campaign = Framework.load()
+
+    results = compute_electricity.impressions_cost(
+        campaign,
+        nb_impressions=10000,
+        creative_type="video",
+        allocation="direct",
+        creative_size_ko=1200,
+        devices_repartition=DEVICES,
+        creative_avg_view_s=5,
+    )
+
+    print(results.shows())
+
+    results = compute_electricity.impressions_cost(
+        campaign,
+        nb_impressions=10000,
+        creative_type="display",
+        allocation="programmatic",
+        creative_size_ko=1200,
+        devices_repartition=DEVICES,
+        creative_avg_view_s=5,
+    )
+    print(results.shows())
+
+   # campaign.change_target_country("DE")  # Changed from France to Germany
+    results = compute_electricity.impressions_cost(
+        campaign,
+        nb_impressions=10000,
+        creative_type="display",
+        allocation="programmatic",
+        creative_size_ko=1200,
+        devices_repartition=DEVICES,
+        creative_avg_view_s=5,
+    )
+    print(results.shows())
+
+    test = ElectricityCost(use=0.1, manufacturing=0.2)
+
+    a = compute_electricity.bids_cost(campaign, nb_bids=1000)
+    print(a.shows())
+
+    a = compute_electricity.adcalls_cost(
+        campaign, nb_ad_calls=1000, creative_type="video"
+    )
+
+    print(a.shows())
