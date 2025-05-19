@@ -30,7 +30,8 @@ if __name__ == "__main__":
     )
 
     print(results.shows())
-
+    print("///////////////////////////")
+    print("This is for a programmatic campaign\n")
     results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,

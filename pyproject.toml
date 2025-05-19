@@ -33,8 +33,9 @@ build-backend = "hatchling.build"
 include = ["src/*", "pyproject.toml", "README.md", "LICENCE"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/carbon"]
+packages = ["src/carbon","src/electricity"]
+
 
 [tool.hatch.version]
 source = "vcs"
-path = "src/carbon/__init__.py"
+path = "src/electricity/__init__.py"
