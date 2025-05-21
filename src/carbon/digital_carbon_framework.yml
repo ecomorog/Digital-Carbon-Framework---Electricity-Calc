@@ -1,103 +1,103 @@
 allocation_network_use:
-  nb_requests_per_active_path: 3
-  mean_https_request_k0: 29
-  uncertainty_margin: 0.5
+  nb_requests_per_active_path: 3 # red, says SSP to DSP (bid reuqest)
+  mean_https_request_k0: 29 # yellow, HTTP Archive
+  uncertainty_margin: 0.5 # safety margin concerns the size of programmatic requests (bid request /bid response)
   fixed_network_use: 1.
-  energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8
+  energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8 #green
   network_trafic_in_datacenter_country_share: 1.
-  emission_factor_server: 0.22
+  emission_factor_server: 0.22 # green, ased on the server location data
     
 allocation_network_manufacturing:
-  nb_requests_per_active_path: 3
-  mean_https_request_k0: 29
-  uncertainty_margin: 0.5
+  nb_requests_per_active_path: 3 # red, says SSP to DSP (bid reuqest)
+  mean_https_request_k0: 29 # yellow, HTTP Archive
+  uncertainty_margin: 0.5 # safety margin concerns the size of programmatic requests (bid request /bid response)
   fixed_network_use: 1.
-  impact_1ko_transport_on_fixed_network_kgCo2_per_kO: 4.43e-9
+  impact_1ko_transport_on_fixed_network_kgCo2_per_kO: 4.43e-9 # green, need to translate to kwH
   
 
 allocation_servers_use:
-  nb_server_requests_per_active_path:  2
-  server_time_calculation_during_auction_s: 5.56e-6
-  vm_mean_power_in_kW: 0.0085
-  pue: 1.69
-  server_consumption: 0.5
-  server_share_local: 0.45
-  server_share_worldwide: 0.55
-  emission_factor_country: 0.052
-  emission_factor_worldwide: 0.357
+  nb_server_requests_per_active_path:  2 # red
+  server_time_calculation_during_auction_s: 5.56e-6 # red
+  vm_mean_power_in_kW: 0.0085 # green
+  pue: 1.69 # green
+  server_consumption: 0.5 #red
+  server_share_local: 0.45 # green, country dependent
+  server_share_worldwide: 0.55 # green
+  emission_factor_country: 0.052 # green for in france, country dependent
+  emission_factor_worldwide: 0.357 # green
 
 allocation_servers_manufacturing:
   nb_server_requests_per_active_path: 2
-  annual_manufacturing_cost_kgco2: 732
-  nb_vm_servers_per_physic_server: 8
-  server_time_calculation_during_auction_s: 5.56e-6
-  server_consumption: 0.5
+  annual_manufacturing_cost_kgco2: 732 # green, can divide by the French carbon factor to get the electricity
+  nb_vm_servers_per_physic_server: 8 # yellow
+  server_time_calculation_during_auction_s: 5.56e-6 # red
+  server_consumption: 0.5 #red
 
 
 
 allocation_network_servers:
-  nb_paths_display: 350
-  nb_paths_video: 100
-  publisher_activated_paths_share: 1.0
-  ssp_activated_paths_share: 1.0
+  nb_paths_display: 350 # red
+  nb_paths_video: 100  #red
+  publisher_activated_paths_share: 1.0 #red
+  ssp_activated_paths_share: 1.0 #red
 
 
 
 distribution_server_use:
   pue_mean: 1.69
-  energy_efficiency_server_target_country: 6.69e-8
-  energy_efficiency_server_worldwide: 7.1e-9
-  server_share_local: 0.45
-  server_share_worldwide: 0.55
-  emission_factor_worldwide: 0.357
-  emission_factor_target_country: 0.052
+  energy_efficiency_server_target_country: 6.69e-8 # depends on country, this value is for France
+  energy_efficiency_server_worldwide: 7.1e-9 # not country dependent,
+  server_share_local: 0.45 # yellow, value for France
+  server_share_worldwide: 0.55 # yellow
+  emission_factor_worldwide: 0.357 # green, 
+  emission_factor_target_country: 0.052 # greenthis is for France,
     
 distribution_server_manufacturing:
-  annual_manufacturing_cost_kgco2: 732
-  bandwidth_server_ko_per_s: 125000
+  annual_manufacturing_cost_kgco2: 732 # green, need to convert
+  bandwidth_server_ko_per_s: 125000 # yellow
   
 
 
 distribution_network_use:
-  fixed_network_usage_share: 0.9
-  fixed_mobile_usage_share: 0.1
-  server_share_local: 0.45
-  server_share_datacenter: 0.55
-  energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8
-  energy_efficiency_mobile_in_use_kWh_per_kO: 2.36e-7
-  emission_factor_target_country: 0.052
-  emission_factor_worldwide: 0.220
+  fixed_network_usage_share: 0.9 #green
+  fixed_mobile_usage_share: 0.1 3 #green
+  server_share_local: 0.45 # green
+  server_share_datacenter: 0.55 # green
+  energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8 #green
+  energy_efficiency_mobile_in_use_kWh_per_kO: 2.36e-7 #green
+  emission_factor_target_country: 0.052 #green, this is france
+  emission_factor_worldwide: 0.220 #green
 
 distribution_network_manufacturing:
-  fixed_network_usage_share: 0.9
-  fixed_mobile_usage_share: 0.1
-  transport_cost_on_fixed_network_kgCo2_per_kO: 4.43e-9
-  transport_cost_on_mobile_kgCo2_per_kO: 7.97e-9
+  fixed_network_usage_share: 0.9 #green
+  fixed_mobile_usage_share: 0.1 #green
+  transport_cost_on_fixed_network_kgCo2_per_kO: 4.43e-9 # green, need to translate to kwH
+  transport_cost_on_mobile_kgCo2_per_kO: 7.97e-9 # green , need to translate to kWh
 
 
 
 distribution_terminal_use:
   smartphone_usage: browser
-  smart_phone_average_power_watt_app: 2.097122
-  smart_phone_average_power_watt_browser: 2.8525
-  tv_average_power_watt: 81.6
-  desktop_average_power_watt: 29.4
-  tablet_average_power_watt: 29.4
-  emission_factor_target_country: 0.052
+  smart_phone_average_power_watt_app: 2.097122 #yellow
+  smart_phone_average_power_watt_browser: 2.8525  #yellow
+  tv_average_power_watt: 81.6 # green
+  desktop_average_power_watt: 29.4 # yellow
+  tablet_average_power_watt: 29.4 # yellow
+  emission_factor_target_country: 0.052 # green for france
 
 distribution_terminal_manufacturing:
-  desktop_average_lifetime_years: 5
-  desktop_average_daily_use_hours_per_day: 2.02
-  desktop_manufacturing_cost_kgco2: 175
+  desktop_average_lifetime_years: 5 #green
+  desktop_average_daily_use_hours_per_day: 2.02 #yellow
+  desktop_manufacturing_cost_kgco2: 175 3 #green
 
-  tv_average_lifetime_years: 8
-  tv_average_daily_use_hours_per_day: 3.85
-  tv_manufacturing_cost_kgco2: 360
+  tv_average_lifetime_years: 8 # green
+  tv_average_daily_use_hours_per_day: 3.85 #yellow
+  tv_manufacturing_cost_kgco2: 360 # green
 
-  tablet_average_lifetime_years: 3
-  tablet_average_daily_use_hours_per_day: 1.50
-  tablet_manufacturing_cost_kgco2: 75.9
+  tablet_average_lifetime_years: 3 #green
+  tablet_average_daily_use_hours_per_day: 1.50 #yellow
+  tablet_manufacturing_cost_kgco2: 75.9 #green
 
-  smart_phone_average_lifetime_years: 2.5
-  smart_phone_average_daily_use_hours_per_day: 2.7
-  smart_phone_manufacturing_cost_kgco2: 84
+  smart_phone_average_lifetime_years: 2.5 #green
+  smart_phone_average_daily_use_hours_per_day: 2.7 # yellow
+  smart_phone_manufacturing_cost_kgco2: 84 #green

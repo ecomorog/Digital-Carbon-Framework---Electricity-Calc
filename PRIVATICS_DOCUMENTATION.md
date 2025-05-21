@@ -6,7 +6,9 @@ To run simply activate your virtual environment and run the command
 
 python3 src/electricity
 
-##Calculations
+
+## Calculations
 
 The following calculations were made to calculate the electricity consumption of an advertising campaign
 
+## Observations

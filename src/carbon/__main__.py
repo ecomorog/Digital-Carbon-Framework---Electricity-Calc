@@ -28,8 +28,7 @@ if __name__ == "__main__":
     )
 
     print(results.shows())
-    print("///////////////////////////\n")
-    print("This is for a programmatic campaign\n")
+
     results = compute_footprints.impressions_cost(
         campaign,
         nb_impressions=10000,
