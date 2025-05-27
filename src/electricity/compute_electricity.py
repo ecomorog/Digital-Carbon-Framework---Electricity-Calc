@@ -61,7 +61,6 @@ class _ShowMixin(BaseModel):
         lines.append(f"{'Overall':>32s}: \tuse: {use:>8s} \t manufacture: {man:>8s}")
         return "\n".join(str(s) for s in lines)
 
-# This calc is fine
 class ElectricityCampaignCost(_ShowMixin, BaseModel):
     """Class summarizing the Electricity cost of the different elements of the programmatic chain, as the total cost of the campaign."""
 
@@ -87,6 +86,18 @@ class ElectricityCampaignCost(_ShowMixin, BaseModel):
             + self.kWh_distrib_terminal
             + self.kWh_allocation_network
             + self.kWh_allocation_server
+        )
+    @property
+    def overall_use(self) -> ElectricityCost:
+        """
+        ElectricityCost: return a ElectricityCost object combining the Electricity emissions of the use of 5 attributes.
+        """
+        return (
+            self.kWh_distrib_server.use
+            + self.kWh_distrib_network.use
+            + self.kWh_distrib_terminal.use
+            + self.kWh_allocation_network.use
+            + self.kWh_allocation_server.use
         )
 
 # This is fine

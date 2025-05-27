@@ -218,7 +218,6 @@ class Framework:
     @dataclass
     class Server:
         share: float 
-        #emission_factor: float
         energy_efficiency_kwh_per_ko: float = 0.0
 
     def multiply_attributes(self, ElectricityCost_: ElectricityCost, factor: float) -> ElectricityCost:
@@ -343,13 +342,13 @@ class Framework:
         return self._emission_factors_dict_iso3
 
     def change_target_country(self, alpha_code: str):
-        
-        #Set the emission factors of the specified country
+        """
+        Set the emission factors of the specified country
 
-        #param alpha_code:  alpha_code of the specified country. Support iso2 & iso3 countries (ex: country: 'France', alpha_code='FR' or alpha_code='FRA' supported)
-        # type alpha_code: str
+        :param alpha_code:  alpha_code of the specified country. Support iso2 & iso3 countries (ex: country: 'France', alpha_code='FR' or alpha_code='FRA' supported)
+        :type alpha_code: str
 
-        
+        """
         logger.info(f"Changing Target country to {alpha_code}")
 
         if len(alpha_code) == 3:
@@ -361,16 +360,30 @@ class Framework:
 
         try:
             new_emission_factor = emission_factors_dict[alpha_code]
-            self.distribution_server_use.emission_factor_target_country = (
-                new_emission_factor
-            )
-            self.distribution_network_use.emission_factor_target_country = (
-                new_emission_factor
-            )
-            self.distribution_terminal_use.emission_factor_target_country = (
-                new_emission_factor
-            )
-            self.allocation_servers_use.emission_factor_country = new_emission_factor
+            self.allocation_network_manufacturing.impact_1ko_transport_on_fixed_network_kWh_per_kO = self.allocation_network_manufacturing.impact_1ko_transport_on_fixed_network_kWh_per_kO/new_emission_factor
+            
+            self.distribution_server_manufacturing.annual_manufacturing_cost_kWh = self.distribution_server_manufacturing.annual_manufacturing_cost_kWh / new_emission_factor
+            
+            self.distribution_network_manufacturing.transport_cost_on_fixed_network_kWh_per_kO = self.distribution_network_manufacturing.transport_cost_on_fixed_network_kWh_per_kO / new_emission_factor
+            self.distribution_network_manufacturing.transport_cost_on_mobile_kWh_per_kO = self.distribution_network_manufacturing.transport_cost_on_mobile_kWh_per_kO /new_emission_factor
+            
+            self.distribution_terminal_manufacturing.desktop_manufacturing_cost_kWh = self.distribution_terminal_manufacturing.desktop_manufacturing_cost_kWh /new_emission_factor
+            self.distribution_terminal_manufacturing.tv_manufacturing_cost_kWh = self.distribution_terminal_manufacturing.tv_manufacturing_cost_kWh /new_emission_factor
+            self.distribution_terminal_manufacturing.tablet_manufacturing_cost_kWh = self.distribution_terminal_manufacturing.tablet_manufacturing_cost_kWh /new_emission_factor
+            self.distribution_terminal_manufacturing.smart_phone_manufacturing_cost_kWh = self.distribution_terminal_manufacturing.smart_phone_manufacturing_cost_kWh /new_emission_factor
+
+            
+            #self.distribution_server_use.emission_factor_target_country = (
+            #    new_emission_factor
+            #)
+            #self.distribution_network_use.emission_factor_target_country = (
+            #    new_emission_factor
+            #)
+            #self.distribution_terminal_use.emission_factor_target_country = (
+            #    new_emission_factor
+            #)
+            #self.allocation_servers_use.emission_factor_country = new_emission_factor
+
             logger.info(f"Emission factors changed to {new_emission_factor} ")
         except KeyError:
             logger.error(f"Alpha code {alpha_code} not in database")
