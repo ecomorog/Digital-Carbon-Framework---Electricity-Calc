@@ -342,13 +342,12 @@ class Framework:
             self._emission_factors_dict_iso3 = self._emission_factors_dict_iso3
         return self._emission_factors_dict_iso3
 
-    #don't need this function if we are not using the co2
-    """def change_target_country(self, alpha_code: str):
+    def change_target_country(self, alpha_code: str):
         
-        Set the emission factors of the specified country
+        #Set the emission factors of the specified country
 
-        :param alpha_code:  alpha_code of the specified country. Support iso2 & iso3 countries (ex: country: 'France', alpha_code='FR' or alpha_code='FRA' supported)
-        :type alpha_code: str
+        #param alpha_code:  alpha_code of the specified country. Support iso2 & iso3 countries (ex: country: 'France', alpha_code='FR' or alpha_code='FRA' supported)
+        # type alpha_code: str
 
         
         logger.info(f"Changing Target country to {alpha_code}")
@@ -376,7 +375,7 @@ class Framework:
         except KeyError:
             logger.error(f"Alpha code {alpha_code} not in database")
             logger.info(f"Emission factors not changed: {alpha_code} not referenced")
-            raise"""
+            raise
 
     @property
     def allocation_factor(self) -> float:

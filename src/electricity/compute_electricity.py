@@ -102,7 +102,6 @@ class BidCost(_ShowMixin, BaseModel):
     def overall(self) -> ElectricityCost:
         return self.kWh_allocation_network + self.kWh_allocation_server
 
-# This is fine
 class AdcallCost(_ShowMixin, BaseModel):
     """Represents the Electricity costs of ad calls."""
 
@@ -115,7 +114,6 @@ class AdcallCost(_ShowMixin, BaseModel):
     def overall(self) -> ElectricityCost:
         return self.kWh_allocation_network + self.kWh_allocation_server
 
- # Need to figure out what the allocation factor means
 def bids_cost(framework, nb_bids: int) -> BidCost:
     """
     Return the kWh cost of a number of bids.
@@ -131,7 +129,7 @@ def bids_cost(framework, nb_bids: int) -> BidCost:
     """
     computation_logger.info(f"Starting bids_cost for {nb_bids} bids.")
 
-    allocation_factor = 4 ########## How is this value set, what does it mean and how did we come to it????
+    allocation_factor = 4 
     bid_cost = BidCost(
         kWh_allocation_network=ElectricityCost(
             **framework.multiply_attributes(
@@ -244,10 +242,10 @@ def impressions_cost(
     else:
         allocation_factor = (
             framework.allocation_factor
-            * framework.allocation_network_servers.nb_paths_video
+            * framework.allocation_network_servers.nb_paths_video # nb_pontential_paths * percent_active_paths
             if creative_type == "video"
             else framework.allocation_factor
-            * framework.allocation_network_servers.nb_paths_display
+            * framework.allocation_network_servers.nb_paths_display # nb_pontential_paths * percent_active_paths
         )
     computation_logger.debug(f"allocation_factor setted to {allocation_factor}")
 

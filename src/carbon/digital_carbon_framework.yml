@@ -5,7 +5,7 @@ allocation_network_use:
   fixed_network_use: 1.
   energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8 #green
   network_trafic_in_datacenter_country_share: 1.
-  emission_factor_server: 0.22 # green, ased on the server location data
+  emission_factor_server: 0.22 # green, based on the server location data
     
 allocation_network_manufacturing:
   nb_requests_per_active_path: 3 # red, says SSP to DSP (bid reuqest)
