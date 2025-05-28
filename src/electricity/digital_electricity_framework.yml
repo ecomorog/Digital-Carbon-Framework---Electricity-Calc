@@ -16,7 +16,7 @@ allocation_network_manufacturing:
 allocation_servers_use:
   nb_server_requests_per_active_path:  2 # red
   server_time_calculation_during_auction_s: 5.56e-6 # red
-  vm_mean_power_in_kW: 0.0085 # green
+  vm_mean_power_in_kWh: 0.0085 # green
   pue: 1.69 # green
   server_consumption: 0.5 #red
   server_share_local: 0.45 # green, country dependent
@@ -35,8 +35,8 @@ allocation_servers_manufacturing:
 allocation_network_servers:
   nb_paths_display: 350 # red
   nb_paths_video: 100  #red
-  publisher_activated_paths_share: 1.0 #red
-  ssp_activated_paths_share: 1.0 #red
+  publisher_activated_paths_share: 1 #red
+  ssp_activated_paths_share: 1 #red
 
 
 

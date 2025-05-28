@@ -160,7 +160,7 @@ if __name__ == "__main__":
     print(results.shows())
 
     print("Display Ads")
-
+    campaign.change_target_country("DE") 
     results = compute_footprints.impressions_cost(
         campaign,
         nb_impressions=10000,
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     print("Calculations for Programmatic Allocation:")
     print("____________________________________")
     print("Video Ads")
-
+    campaign.change_target_country("DE")
     results = compute_footprints.impressions_cost(
         campaign,
         nb_impressions=10000,

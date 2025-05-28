@@ -1,9 +1,8 @@
 import os
-from typing import Literal
 import yaml
 
 from electricity import computation_logger, compute_electricity, logger
-from electricity.compute_electricity import ElectricityCost
+from electricity.compute_electricity import impressions_cost, adcalls_cost, bids_cost
 from electricity.digital_electricity_framework import Framework
 from electricity.utils import Distribution
 
@@ -23,7 +22,7 @@ def generate_campaign(iso): # generates a campaign based on country
     DEVICES = Distribution(weights=DEVICES_REPARTITION)
 
     #https://support.google.com/google-ads/answer/13547298?hl=en
-    video_size_ko = 4000 #256 GB is the upper bound
+    video_size_ko = 5000 #256 GB is the upper bound
 
 
     # https://support.google.com/google-ads/answer/1722096?hl=en
@@ -89,7 +88,7 @@ def generate_campaign(iso): # generates a campaign based on country
 
 # read in the eu population yml
 def eu_population() -> dict:
-    eu_population_dict = {}
+    eu_population_dict = None
     if eu_population_dict is None:
         with open(
             os.path.join(os.path.dirname(__file__), "pop_eu.yml"), "r"
@@ -102,7 +101,7 @@ def eu_population() -> dict:
 
 # read in the rtb data yml
 def eu_rtb() -> dict:
-    eu_rtb_dict = {}
+    eu_rtb_dict = None
     if eu_rtb_dict is None:
         with open(
             os.path.join(os.path.dirname(__file__), "rtb_eu.yml"), "r"
@@ -129,21 +128,76 @@ def calc_france(eu_rtb_dict, eu_pop_dict):
     daily_rtb = eu_rtb_dict["FR"]
 
     # normalize to find the value per one impression
-    video_electricity_direct = (ad_campaign["direct_video"].overall_use()) / 10000 #only want to consider usage
-    video_electricity_programmatic = (ad_campaign["programmatic_video"].overall_use()) / 10000
-    display_electricity_direct = (ad_campaign["direct_display"].overall_use()) / 10000
-    display_electricity_programmatic = (ad_campaign["programmatic_display"].overall_use()) / 10000
+    video_electricity_direct = ad_campaign["direct_video"].overall_use / 10000 #only want to consider usage
+    video_electricity_direct_ds = ad_campaign["direct_video"].kWh_distrib_server.use / 10000 #only want to consider usage
+    video_electricity_direct_dn = ad_campaign["direct_video"].kWh_distrib_network.use / 10000 #only want to consider usage
+    video_electricity_direct_dt = ad_campaign["direct_video"].kWh_distrib_terminal.use / 10000 #only want to consider usage
+    video_electricity_direct_an = ad_campaign["direct_video"].kWh_allocation_network.use / 10000 #only want to consider usage
+    video_electricity_direct_as = ad_campaign["direct_video"].kWh_allocation_server.use / 10000 #only want to consider usage
+    
+    video_electricity_programmatic = ad_campaign["programmatic_video"].overall_use / 10000
+    video_electricity_programmatic_ds = ad_campaign["programmatic_video"].kWh_distrib_server.use / 10000
+    video_electricity_programmatic_dn = ad_campaign["programmatic_video"].kWh_distrib_network.use / 10000
+    video_electricity_programmatic_dt = ad_campaign["programmatic_video"].kWh_distrib_terminal.use / 10000
+    video_electricity_programmatic_an = ad_campaign["programmatic_video"].kWh_allocation_network.use / 10000
+    video_electricity_programmatic_as = ad_campaign["programmatic_video"].kWh_allocation_server.use / 10000
+    
+    display_electricity_direct = ad_campaign["direct_display"].overall_use / 10000
+    display_electricity_direct_ds = ad_campaign["direct_display"].kWh_distrib_server.use / 10000
+    display_electricity_direct_dn = ad_campaign["direct_display"].kWh_distrib_network.use / 10000
+    display_electricity_direct_dt = ad_campaign["direct_display"].kWh_distrib_terminal.use / 10000
+    display_electricity_direct_an = ad_campaign["direct_display"].kWh_allocation_network.use / 10000
+    display_electricity_direct_as = ad_campaign["direct_display"].kWh_allocation_server.use / 10000
+    
+    display_electricity_programmatic = ad_campaign["programmatic_display"].overall_use / 10000
+    display_electricity_programmatic_ds = ad_campaign["programmatic_display"].kWh_distrib_server.use  / 10000
+    display_electricity_programmatic_dn = ad_campaign["programmatic_display"].kWh_distrib_network.use  / 10000
+    display_electricity_programmatic_dt = ad_campaign["programmatic_display"].kWh_distrib_terminal.use  / 10000
+    display_electricity_programmatic_an = ad_campaign["programmatic_display"].kWh_allocation_network.use  / 10000
+    display_electricity_programmatic_as = ad_campaign["programmatic_display"].kWh_allocation_server.use  / 10000
 
     # give weight to consider each value
-    programmatic_impression_elec = video_share*video_electricity_programmatic + display_share * display_electricity_programmatic
+    programmatic_impression_elec =video_share*video_electricity_programmatic + display_share * display_electricity_programmatic
+    programmatic_kWh_distrib_server = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_ds + display_share * display_electricity_programmatic_ds)
+    programmatic_kWh_distrib_network = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_dn + display_share * display_electricity_programmatic_dn)
+    programmatic_kWh_distrib_terminal = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_dt + display_share * display_electricity_programmatic_dt)
+    programmatic_kWh_allocation_server = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_an + display_share * display_electricity_programmatic_an)
+    programmatic_kWh_allocation_network = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_as + display_share * display_electricity_programmatic_as)
+
+    
     direct_impression_elec = video_share*video_electricity_direct + display_share * display_electricity_direct
+    direct_kWh_distrib_server = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_direct_ds + display_share * display_electricity_direct_ds)
+    direct_kWh_distrib_network = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_direct_dn + display_share * display_electricity_direct_dn)
+    direct_kWh_distrib_terminal = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_direct_dt + display_share * display_electricity_direct_dt)
+    direct_kWh_allocation_server = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_direct_as + display_share * display_electricity_direct_as)
+    direct_kWh_allocation_network = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_direct_an + display_share * display_electricity_direct_an)
 
     # calculation for anual consumption for France, need to print and test if it actually works 
     annual_programmatic_elctricity = daily_rtb*per_pop_online*fr_pop*365*programmatic_impression_elec
     annual_direct_electricity = daily_rtb*per_pop_online*fr_pop*365*direct_impression_elec
 
-    print("annual programmatic electricity usage: ", annual_programmatic_elctricity)
-    print("annual display electricity usage: ", annual_direct_electricity)
+    print("Programmatic Advertising Campaign Estimates")
+    print("--------------------------------------------")
+    print(f"prog kWh_distrib_server: {programmatic_kWh_distrib_server}")
+    print(f"prog kWh_distrib_network: {programmatic_kWh_distrib_network}")
+    print(f"prog kWh_distrib_terminal: {programmatic_kWh_distrib_terminal}")
+    print(f"prog kWh_allocation_network:  {programmatic_kWh_allocation_network}")
+    print(f"prog kWh_allocation_server: {programmatic_kWh_allocation_server}")
+    print(f"Programmatic Impression {programmatic_impression_elec}")
+    print(f"prog Annual programmatic electricity usage in France: {annual_programmatic_elctricity}")
+    print("\n")
+
+    print("Direct Advertising Campaign Estimates")
+    print("--------------------------------------------")
+    print(f"direct kWh_distrib_server: {direct_kWh_distrib_server}")
+    print(f"direct kWh_distrib_network: {direct_kWh_distrib_network}")
+    print(f"direct kWh_distrib_terminal: {direct_kWh_distrib_terminal}")
+    print(f"direct kWh_allocation_network:  {direct_kWh_allocation_network}")
+    print(f"direct kWh_allocation_server: {direct_kWh_allocation_server}")
+    print(f"Direct Impression {direct_impression_elec}")
+    print(f"Annual direct electricity usage in France: {annual_direct_electricity}")
+
+
 
 
 
@@ -156,16 +210,16 @@ def calc_eu(eu_rtb_dict, eu_pop_dict):
     video_share = 0.3 #this is just a guess
     display_share = 0.7  # this is just a guess
     per_pop_online = 0.9 # percent of each population we assume is online
-
-    for iso, population in eu_pop_dict:
-        
+    print(eu_pop_dict)
+    print(eu_rtb_dict)
+    for iso, population in eu_pop_dict.items():
         daily_rtb = eu_rtb_dict[iso]
         ad_campaign = generate_campaign(iso)
 
-        video_electricity_direct = (ad_campaign["direct_video"].overall_use()) / 10000 #only want to consider usage
-        video_electricity_programmatic = (ad_campaign["programmatic_video"].overall_use()) / 10000
-        display_electricity_direct = (ad_campaign["direct_display"].overall_use()) / 10000
-        display_electricity_programmatic = (ad_campaign["programmatic_display"].overall_use()) / 10000
+        video_electricity_direct = ad_campaign["direct_video"].overall_use/ 10000 #only want to consider usage
+        video_electricity_programmatic = ad_campaign["programmatic_video"].overall_use / 10000
+        display_electricity_direct = ad_campaign["direct_display"].overall_use / 10000
+        display_electricity_programmatic = ad_campaign["programmatic_display"].overall_use / 10000
 
         programmatic_impression_elec = video_share*video_electricity_programmatic + display_share * display_electricity_programmatic
         direct_impression_elec = video_share*video_electricity_direct + display_share * display_electricity_direct
@@ -176,30 +230,18 @@ def calc_eu(eu_rtb_dict, eu_pop_dict):
 
         eu_total_direct += annual_direct_electricity
         eu_total_programmatic += annual_programmatic_elctricity
+    print(eu_total_direct)
+    print(eu_total_programmatic)
 
-
-
-# campaign.change_target_country("DE")
-# Algo: 
-# Iterate through all of the country codes in the pop eu and rtb
-# generate an model ad campaign in that country
-# extract the electricity output for that single impression
-# calc: 
-#       RTB_broadcasts_per_day × 365 × Online_population_fraction × Populatation × Electricity_per_impression
-#       Electricity_per_impression = ((Electricity_Consum_Vid_Prog_Per_imp) (1 - %of Display Impressions) + 
-#       (Electricity_Consum_Disp_Prog_Per_Imp)(%of Disp Impressions))
-#       do a running sum of all of this to calc just for the EU
-
-# things to recalc: energy conversions that are extracted by dividing by the carbon emission factor
-#                   local share vs the global share of servers
-#                   fixed vs mobile network usage
-
-# do the same for a direct ad campaign
 
 
 def main():
  pop_dict = eu_population()
  rtb_dict = eu_rtb()
- calc_france(pop_dict, rtb_dict)
+ calc_france(rtb_dict,pop_dict)
+ #calc_eu(rtb_dict, pop_dict)
+
+ # 4 key factors affecting the output, the 350,100, the percent of SSP and percent of 
+
 
 main()

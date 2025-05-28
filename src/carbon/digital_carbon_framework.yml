@@ -60,7 +60,7 @@ distribution_server_manufacturing:
 
 distribution_network_use:
   fixed_network_usage_share: 0.9 #green
-  fixed_mobile_usage_share: 0.1 3 #green
+  fixed_mobile_usage_share: 0.1 #green
   server_share_local: 0.45 # green
   server_share_datacenter: 0.55 # green
   energy_efficiency_fixed_network_in_use_kWh_per_kO: 6.87e-8 #green

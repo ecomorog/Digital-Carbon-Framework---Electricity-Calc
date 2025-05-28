@@ -34,7 +34,7 @@ if __name__ == "__main__":
 #https://www.iabstandards.be/#/
 # https://support.google.com/google-ads/answer/1722096?hl=en#zippy=%2Camphtml-ads-created-in-google-web-designer
 # limit suggeted by IAB
-    display_size_ko = 150 # the max google
+    display_size_ko = 100 # the max google
 
 
     impression_count = 10000
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     print("Calculations for Direct Allocation:")
     print("____________________________________")
-    print("Video Ads")
+    print("Video Direct Ads")
 
     results = compute_electricity.impressions_cost(
         campaign,
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     print(results.shows())
 
-    print("Display Ads")
+    print("Display Direct Ads")
 
     results = compute_electricity.impressions_cost(
         campaign,
@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     print("Calculations for Programmatic Allocation:")
     print("____________________________________")
-    print("Video Ads")
+    print("Video Direct Ads")
 
     results = compute_electricity.impressions_cost(
         campaign,
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     print(results.shows())
 
-    print("Display Ads")
+    print("Display Direct Ads")
     results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=impression_count,
