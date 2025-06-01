@@ -184,7 +184,7 @@ def adcalls_cost(
         framework.allocation_network_servers.nb_paths_video
         if creative_type == "video"
         else framework.allocation_network_servers.nb_paths_display
-    ) / 10
+    ) / 3000
 
     computation_logger.debug(f"Allocation factor is set to {allocation_factor}.")
 

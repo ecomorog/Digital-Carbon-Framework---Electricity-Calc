@@ -33,10 +33,10 @@ allocation_servers_manufacturing:
 
 
 allocation_network_servers:
-  nb_paths_display: 350 # red
-  nb_paths_video: 100  #red
-  publisher_activated_paths_share: 1 #red
-  ssp_activated_paths_share: 1 #red
+  nb_paths_display: 4260 # red
+  nb_paths_video: 3948  #red
+  publisher_activated_paths_share: 0.5 #red
+  ssp_activated_paths_share: 0.5 #red
 
 
 

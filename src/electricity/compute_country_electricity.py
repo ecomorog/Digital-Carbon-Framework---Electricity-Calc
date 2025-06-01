@@ -124,8 +124,8 @@ def calc_france(eu_rtb_dict, eu_pop_dict):
     display_share = 0.7  # this is just a guess
 
     per_pop_online = 0.9
-    fr_pop = eu_pop_dict["FR"]
-    daily_rtb = eu_rtb_dict["FR"]
+    fr_pop = eu_pop_dict["FR"] # this is fine
+    daily_rtb = eu_rtb_dict["FR"] # this is fine
 
     # normalize to find the value per one impression
     video_electricity_direct = ad_campaign["direct_video"].overall_use / 10000 #only want to consider usage
@@ -157,7 +157,7 @@ def calc_france(eu_rtb_dict, eu_pop_dict):
     display_electricity_programmatic_as = ad_campaign["programmatic_display"].kWh_allocation_server.use  / 10000
 
     # give weight to consider each value
-    programmatic_impression_elec =video_share*video_electricity_programmatic + display_share * display_electricity_programmatic
+    programmatic_impression_elec = video_share*video_electricity_programmatic + display_share * display_electricity_programmatic
     programmatic_kWh_distrib_server = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_ds + display_share * display_electricity_programmatic_ds)
     programmatic_kWh_distrib_network = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_dn + display_share * display_electricity_programmatic_dn)
     programmatic_kWh_distrib_terminal = daily_rtb*per_pop_online*fr_pop*365*(video_share*video_electricity_programmatic_dt + display_share * display_electricity_programmatic_dt)
@@ -184,7 +184,7 @@ def calc_france(eu_rtb_dict, eu_pop_dict):
     print(f"prog kWh_allocation_network:  {programmatic_kWh_allocation_network}")
     print(f"prog kWh_allocation_server: {programmatic_kWh_allocation_server}")
     print(f"Programmatic Impression {programmatic_impression_elec}")
-    print(f"prog Annual programmatic electricity usage in France: {annual_programmatic_elctricity}")
+    print(f"Prog Annual programmatic electricity usage in France: {annual_programmatic_elctricity}")
     print("\n")
 
     print("Direct Advertising Campaign Estimates")
@@ -205,7 +205,7 @@ def calc_france(eu_rtb_dict, eu_pop_dict):
 def calc_eu(eu_rtb_dict, eu_pop_dict):
 
     eu_total_direct = 0.
-    eu_total_programmatic = 0
+    eu_total_programmatic = 0.
 
     video_share = 0.3 #this is just a guess
     display_share = 0.7  # this is just a guess
