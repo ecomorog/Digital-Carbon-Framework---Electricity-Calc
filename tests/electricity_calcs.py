@@ -1,8 +1,7 @@
-from carbon import computation_logger, compute_footprints, logger
-from carbon.compute_footprints import Co2Cost
-from carbon.digital_carbon_framework import Framework
-from carbon.utils import Distribution
-
+from electricity import computation_logger, compute_electricity, logger
+from electricity.compute_electricity import ElectricityCost
+from electricity.digital_electricity_framework import Framework
+from electricity.utils import Distribution
 
 if __name__ == "__main__":
 
@@ -16,16 +15,16 @@ if __name__ == "__main__":
     ######## VIDEO AD ##########
     # AD Video Displayed on Desktop
     DEVICES_REPARTITION_VIDEO = {
-        "desktop": 0.5,
-        "smart_phone": 0.5,
+        "desktop": 1,
+        "smart_phone": 0.0,
         "tablet": 0.0,
         "connected_tv": 0.0,
     }
 
     # AD DISPLAY
     DEVICES_REPARTITION_DISPLAY= {
-        "desktop": 0.5,
-        "smart_phone": 0.5,
+        "desktop": 0.0,
+        "smart_phone": 1.0,
         "tablet": 0.0,
         "connected_tv": 0.0,
     }
@@ -35,7 +34,7 @@ if __name__ == "__main__":
 
 ### Creative Size Depending on the Creative Type
     
-# base these numbers on Google Ads
+    # base these numbers on Google Ads
 #https://support.google.com/google-ads/answer/13547298?hl=en
     video_size_ko = 5000 #256 GB is the upper bound
 
@@ -57,26 +56,25 @@ if __name__ == "__main__":
     print("____________________________________")
     print("Video Ads")
 
-    results = compute_footprints.impressions_cost(
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="video",
         allocation="direct",
         creative_size_ko= video_size_ko,
-        devices_repartition=DEVICES_VIDEO,
+        devices_repartition=DEVICES_REPARTITION_VIDEO,
         creative_avg_view_s=video_avg_view_s,
     )
 
     print(results.shows())
 
-    print("Display Ads")
-    results = compute_footprints.impressions_cost(
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="display",
         allocation="direct",
         creative_size_ko= display_size_ko,
-        devices_repartition=DEVICES_DISPLAY,
+        devices_repartition=DEVICES_REPARTITION_DISPLAY,
         creative_avg_view_s=display_avg_view_s,
     )
 
@@ -85,26 +83,26 @@ if __name__ == "__main__":
     print("Calculations for Programmatic Allocation:")
     print("____________________________________")
     print("Video Ads")
-    results = compute_footprints.impressions_cost(
+
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="video",
         allocation="programmatic",
         creative_size_ko= video_size_ko,
-        devices_repartition=DEVICES_VIDEO,
+        devices_repartition=DEVICES_REPARTITION_VIDEO,
         creative_avg_view_s=video_avg_view_s,
     )
 
     print(results.shows())
 
-    print("Display Ads")
-    results = compute_footprints.impressions_cost(
+    results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=10000,
         creative_type="display",
         allocation="programmatic",
         creative_size_ko= display_size_ko,
-        devices_repartition=DEVICES_DISPLAY,
+        devices_repartition=DEVICES_REPARTITION_DISPLAY,
         creative_avg_view_s=display_avg_view_s,
     )
 
