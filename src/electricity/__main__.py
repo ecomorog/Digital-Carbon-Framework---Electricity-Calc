@@ -14,12 +14,14 @@ if __name__ == "__main__":
 
     ######## VIDEO AD ##########
     # AD Video Displayed on Desktop
-    DEVICES_REPARTITION = {
-        "desktop": 18,
-        "smart_phone": 61,
-        "tablet": 4,
-        "connected_tv": 17,
-    }
+    #DEVICES_REPARTITION = {
+    #   "desktop": 18,
+    #    "smart_phone": 61,
+    #    "tablet": 4,
+    #    "connected_tv": 17,
+    #}
+
+
 
     DEVICES = Distribution(weights=DEVICES_REPARTITION)
 
@@ -42,6 +44,7 @@ if __name__ == "__main__":
     display_avg_view_s = 3
     
     campaign = Framework.load()
+    campaign.change_target_country("FR")
 
     print("Calculations for Direct Allocation:")
     print("____________________________________")
@@ -75,9 +78,9 @@ if __name__ == "__main__":
 
     print("Calculations for Programmatic Allocation:")
     print("____________________________________")
-    print("Video Direct Ads")
+    print("Video Prog Ads")
 
-    results = compute_electricity.impressions_cost(
+    results_prog = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=impression_count,
         creative_type="video",
@@ -87,9 +90,9 @@ if __name__ == "__main__":
         creative_avg_view_s=video_avg_view_s,
     )
 
-    print(results.shows())
+    print(results_prog.shows())
 
-    print("Display Direct Ads")
+    print("Display Prog Ads")
     results = compute_electricity.impressions_cost(
         campaign,
         nb_impressions=impression_count,

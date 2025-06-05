@@ -13,23 +13,25 @@ def generate_campaign(iso): # generates a campaign based on country
 
     #based on iab partition assumptions
     DEVICES_REPARTITION = {
-        "desktop": 18,
+       "desktop": 18,
         "smart_phone": 61,
         "tablet": 4,
         "connected_tv": 17,
     }
 
+
+
     DEVICES = Distribution(weights=DEVICES_REPARTITION)
 
     #https://support.google.com/google-ads/answer/13547298?hl=en
-    video_size_ko = 5000 #256 GB is the upper bound
+    video_size_ko = 4000 #256 GB is the upper bound
 
 
     # https://support.google.com/google-ads/answer/1722096?hl=en
     #https://www.iabstandards.be/#/
     # https://support.google.com/google-ads/answer/1722096?hl=en#zippy=%2Camphtml-ads-created-in-google-web-designer
     # limit suggeted by IAB
-    display_size_ko = 150 # the max google ad size and IAB suggested
+    display_size_ko = 100 # the max google ad size and IAB suggested
 
     impression_count = 10000 # scales linearly
     video_avg_view_s = 6 # based on 5 second as skip
@@ -120,10 +122,10 @@ def calc_france(eu_rtb_dict, eu_pop_dict):
     ad_campaign = generate_campaign("FR")
 
     # give weight to both the video and display share in consideration for 1 RTB
-    video_share = 0.3 #this is just a guess
-    display_share = 0.7  # this is just a guess
+    video_share = 0.4 #this is just a guess
+    display_share = 0.6  # this is just a guess
 
-    per_pop_online = 0.9
+    per_pop_online = 0.75
     fr_pop = eu_pop_dict["FR"] # this is fine
     daily_rtb = eu_rtb_dict["FR"] # this is fine
 
