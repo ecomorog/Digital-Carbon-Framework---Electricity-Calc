@@ -88,7 +88,7 @@ distribution_terminal_use:
 distribution_terminal_manufacturing:
   desktop_average_lifetime_years: 5 #green
   desktop_average_daily_use_hours_per_day: 2.02 #yellow
-  desktop_manufacturing_cost_kgco2: 175 3 #green
+  desktop_manufacturing_cost_kgco2: 175 #green
 
   tv_average_lifetime_years: 8 # green
   tv_average_daily_use_hours_per_day: 3.85 #yellow
